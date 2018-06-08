@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://jiam.pro/2018/06/07/Hexo-%E5%BC%80%E7%AF%87/</loc>
-    <lastmod>2018-06-08T05:05:42.431Z</lastmod>
+    <loc>http://jiam.pro/2018/06/02/Hexo-two/</loc>
+    <lastmod>2018-06-08T09:14:05.206Z</lastmod>
     <data>
         <display>
-        <title>Mac环境下基于Hexo+GitHubPages搭建个人博客(一)</title>
-        <pubTime>2018-06-07T09:33:06.000Z</pubTime>
+        <title>Mac环境下基于Hexo+GitHubPages搭建个人博客(二)</title>
+        <pubTime>2018-06-02T05:53:42.125Z</pubTime>
         
         <tag>Hexo</tag>
          
@@ -24,15 +24,20 @@
 
     
   <url>
-    <loc>http://jiam.pro/2018/06/02/hello-world/</loc>
-    <lastmod>2018-06-07T06:05:29.945Z</lastmod>
+    <loc>http://jiam.pro/2018/06/07/Hexo-%E5%BC%80%E7%AF%87/</loc>
+    <lastmod>2018-06-08T05:05:42.431Z</lastmod>
     <data>
         <display>
-        <title>Hello World</title>
-        <pubTime>2018-06-02T05:53:42.125Z</pubTime>
+        <title>Mac环境下基于Hexo+GitHubPages搭建个人博客(一)</title>
+        <pubTime>2018-06-07T09:33:06.000Z</pubTime>
         
+        <tag>Hexo</tag>
+         
          
            
+             
+              <breadCrumb title="Hexo" url="http://jiam.pro/categories/Hexo/"/>
+          
         </display>
     </data>
     </url>
