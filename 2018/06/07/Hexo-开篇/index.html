@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="Hexo 搭建一些心得明天更新">
+<meta name="description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
 <meta name="keywords" content="Hexo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo 开篇">
+<meta property="og:title" content="Mac环境下基于Hexo+GitHubPages搭建个人博客(一)">
 <meta property="og:url" content="http://jiam.pro/2018/06/07/Hexo-开篇/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="Hexo 搭建一些心得明天更新">
+<meta property="og:description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-07T09:35:08.987Z">
+<meta property="og:image" content="http://jiam.pro/images/default_hexo.jpg">
+<meta property="og:updated_time" content="2018-06-08T05:05:42.431Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo 开篇">
-<meta name="twitter:description" content="Hexo 搭建一些心得明天更新">
+<meta name="twitter:title" content="Mac环境下基于Hexo+GitHubPages搭建个人博客(一)">
+<meta name="twitter:description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
+<meta name="twitter:image" content="http://jiam.pro/images/default_hexo.jpg">
 
 
 
@@ -126,7 +128,7 @@
 
 
 
-  <title>Hexo 开篇 | Sai</title>
+  <title>Mac环境下基于Hexo+GitHubPages搭建个人博客(一) | Sai</title>
   
 
 
@@ -330,7 +332,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hexo 开篇</h1>
+          <h1 class="post-title" itemprop="name headline">Mac环境下基于Hexo+GitHubPages搭建个人博客(一)</h1>
         
 
         <div class="post-meta">
@@ -416,7 +418,25 @@
       
 
       
-        <h1 id="Hexo-搭建一些心得"><a href="#Hexo-搭建一些心得" class="headerlink" title="Hexo 搭建一些心得"></a>Hexo 搭建一些心得</h1><p>明天更新</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。</p>
+<p>&emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然搭建的过程中也踩了不少坑，仅此记录下来，或许能给他人一些帮助，不胜欣慰。</p>
+<a id="more"></a>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>1.Xcode 安装(Mac上基本都自带了)</p>
+<p>2.Git，这个直接用的终端，问题不大，没有按照其他教程安装(Windows环境需要安装<a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a>)</p>
+<p>3.Node.js安装，直接去官网下载最新的安装包<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></p>
+<h2 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h2><p>1.环境配置好后，就可以安装<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo</a>了，因为Hexo不断在更新，所以还是建议按照官网流程走。</p>
+<p>打开终端执行以下命令安装Hexo:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
+<p>Tips:可能会要求输入密码(登录密码)</p>
+<h2 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h2><p>1.新建一个文件夹用来初始化Hexo文件</p>
+<p>2.打开终端 <em>cd</em> 到文件夹目录下执行命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+<p>3.以上安装工作已经结束，接着生成静态文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate (hexo g)</span><br></pre></td></tr></table></figure>
+<p>4.静态页面生成后，开启本地预览，执行:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server (hexo s)</span><br></pre></td></tr></table></figure></p>
+<p>5.浏览器输入 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 可以预览,如下图:</p>
+<p><img src="/images/default_hexo.jpg" alt=""></p>
+<p>6.如此，本地的Hexo已经可以正常跑起来了，接下来就是发布到Github上了，强烈建议，申请一个个人域名，这里在操作的时候也遇到了坑，可以先从阿里云申请域名<a href="https://wanwang.aliyun.com/?utm_content=se_882117&amp;gclid=CjwKCAjwr-PYBRB8EiwALtjbz_948P-a_skvr3Nw0r9do3UalC8ozEZa9NIjZzz9Ew5LIqaPdTTjrRoCDa8QAvD_BwE" target="_blank" rel="noopener">阿里云</a>;不过需要审核，需要耐心等待。因为不知道情况，腾讯云也注册了一个，有点浪费～～～。看个人喜好，这里是入口:<a href="https://dnspod.cloud.tencent.com/?fromSource=gwzcw.426584.426584.426584&amp;gclid=CjwKCAjwr-PYBRB8EiwALtjbz7tn6YJgGD6NFSMJeOJ7nVac0TS46psWy5ECUMDz4GY9V1wHHTlpDRoCU1IQAvD_BwE" target="_blank" rel="noopener">腾讯云</a></p>
 
       
     </div>
@@ -644,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo-搭建一些心得"><span class="nav-number">1.</span> <span class="nav-text">Hexo 搭建一些心得</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境配置"><span class="nav-number">2.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo安装"><span class="nav-number">3.</span> <span class="nav-text">Hexo安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建站"><span class="nav-number">4.</span> <span class="nav-text">建站</span></a></li></ol></div>
             
 
           </div>
