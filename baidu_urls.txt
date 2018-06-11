@@ -1,5 +1,1 @@
 http://jiam.pro/2018/06/11/Hexo-three/
-http://jiam.pro/2018/06/07/Hexo-开篇/
-http://jiam.pro/2018/06/07/Git-开篇/
-http://jiam.pro/2018/06/06/Java-开篇/
-http://jiam.pro/2018/06/06/Android-开篇/
