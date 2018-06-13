@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式 基本命令1git status (查看当前的工作目录以及文件的状态，一般提交之前初步检查文件修改状况) 1git add 与 git ad">
+<meta name="description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式">
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git常用命令整理">
 <meta property="og:url" content="http://jiam.pro/2018/06/07/Git-开篇/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式 基本命令1git status (查看当前的工作目录以及文件的状态，一般提交之前初步检查文件修改状况) 1git add 与 git ad">
+<meta property="og:description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-13T08:01:06.380Z">
+<meta property="og:updated_time" content="2018-06-13T08:58:58.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用命令整理">
-<meta name="twitter:description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式 基本命令1git status (查看当前的工作目录以及文件的状态，一般提交之前初步检查文件修改状况) 1git add 与 git ad">
+<meta name="twitter:description" content="Git&amp;emsp;平时用到的Git作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。 克隆仓库12git clone + (https的地址 or SSH key 的形式)一般习惯使用 &apos;SSH key&apos; 的形式">
 
 
 
@@ -418,6 +418,7 @@
       
         <h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>&emsp;平时用到的<a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">Git</a>作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。</p>
 <h4 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> + (https的地址 or SSH key 的形式)</span><br><span class="line">一般习惯使用 <span class="string">'SSH key'</span> 的形式</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h4 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status (查看当前的工作目录以及文件的状态，一般提交之前初步检查文件修改状况)</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add 与 git add . (git add 使用比较频繁，git add fileName.(-T)， git add . 则遍历提交，提交全部)</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">"提交信息"</span> (提交修改到本地，继git add 后执行，如果执行git commit后发现有小改动可以执行 git commit --amend 追加提交；编辑好之后 wq退出编辑即可提交到本地)</span><br></pre></td></tr></table></figure>
