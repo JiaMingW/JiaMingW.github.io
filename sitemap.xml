@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://jiam.pro/2018/06/07/Git-%E5%BC%80%E7%AF%87/</loc>
+    
+    <lastmod>2018-06-13T08:01:06.380Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jiam.pro/2018/06/11/Hexo-four/</loc>
     
     <lastmod>2018-06-11T10:04:07.339Z</lastmod>
@@ -26,13 +33,6 @@
     <loc>http://jiam.pro/2018/06/07/Hexo-%E5%BC%80%E7%AF%87/</loc>
     
     <lastmod>2018-06-08T05:05:42.431Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jiam.pro/2018/06/07/Git-%E5%BC%80%E7%AF%87/</loc>
-    
-    <lastmod>2018-06-07T01:58:17.894Z</lastmod>
     
   </url>
   

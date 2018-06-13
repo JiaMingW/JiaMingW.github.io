@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://jiam.pro/2018/06/07/Git-%E5%BC%80%E7%AF%87/</loc>
+    <lastmod>2018-06-13T08:01:06.380Z</lastmod>
+    <data>
+        <display>
+        <title>Git常用命令整理</title>
+        <pubTime>2018-06-07T01:56:58.000Z</pubTime>
+        
+        <tag>Git</tag>
+         
+         
+           
+             
+              <breadCrumb title="Git" url="http://jiam.pro/categories/Git/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://jiam.pro/2018/06/11/Hexo-four/</loc>
     <lastmod>2018-06-11T10:04:07.339Z</lastmod>
     <data>
@@ -77,26 +97,6 @@
            
              
               <breadCrumb title="Hexo" url="http://jiam.pro/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://jiam.pro/2018/06/07/Git-%E5%BC%80%E7%AF%87/</loc>
-    <lastmod>2018-06-07T01:58:17.894Z</lastmod>
-    <data>
-        <display>
-        <title>Git 开篇</title>
-        <pubTime>2018-06-07T01:56:58.000Z</pubTime>
-        
-        <tag>Git</tag>
-         
-         
-           
-             
-              <breadCrumb title="Git" url="http://jiam.pro/categories/Git/"/>
           
         </display>
     </data>

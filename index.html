@@ -779,7 +779,7 @@ Hexo, NexT - Sai - 人生不就是这般
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/06/07/Git-开篇/" itemprop="url">Git 开篇</a></h1>
+                <a class="post-title-link" href="/2018/06/07/Git-开篇/" itemprop="url">Git常用命令整理</a></h1>
         
 
         <div class="post-meta">
@@ -855,8 +855,26 @@ Hexo, NexT - Sai - 人生不就是这般
       
         
           
-            <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><p>作为优秀的版本控制工具，有必要很好的加以掌握</p>
-
+            <h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p>&emsp;平时用到的<a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">Git</a>作为版本控制的工具，记录一下常用的命令，方便以后查阅；以及整理以后可能会用到的命令。</p>
+<h4 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> + (https的地址 or SSH key 的形式)</span><br><span class="line">一般习惯使用 <span class="string">'SSH key'</span> 的形式</span><br></pre></td></tr></table></figure>
+<h4 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status (查看当前的工作目录以及文件的状态，一般提交之前初步检查文件修改状况)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add 与 git add . (git add 使用比较频繁，git add fileName.(-T)， git add . 则遍历提交，提交全部)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">"提交信息"</span> (提交修改到本地，继git add 后执行，如果执行git commit后发现有小改动可以执行 git commit --amend 追加提交；编辑好之后 wq退出编辑即可提交到本地)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span> (查看提交的历史)</span><br></pre></td></tr></table></figure>
+<h4 id="分支相关"><a href="#分支相关" class="headerlink" title="分支相关"></a>分支相关</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch (查看本地分支)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a (查看本地以及远程分支)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch branchName (创建分支名称为 <span class="string">'branchName'</span> 的新分支)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout branchName (切换分支，切换到 <span class="string">'branchName'</span> 的分支上)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d branchName (删除本地分支， <span class="string">'git branch -D branchName'</span> 强制删除)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :branchName (删除远程分支)</span><br></pre></td></tr></table></figure>
+<h4 id="克隆远程分支并创建对应的本地分支"><a href="#克隆远程分支并创建对应的本地分支" class="headerlink" title="克隆远程分支并创建对应的本地分支"></a>克隆远程分支并创建对应的本地分支</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b branchName origin/branchName (克隆远程 <span class="string">'branchName'</span> 的分支，并在本地新建 <span class="string">'branchName'</span> 的分支与之对应)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -t origin/branchName (`-t`参数:默认会在本地新建一个和远程分支同名的 <span class="string">'branchName'</span> 分支)</span><br></pre></td></tr></table></figure>
+<h4 id="获取远程分支的最新提交"><a href="#获取远程分支的最新提交" class="headerlink" title="获取远程分支的最新提交"></a>获取远程分支的最新提交</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull (git fetch 并 merge)</span><br></pre></td></tr></table></figure>
+<h4 id="提交到远程分支"><a href="#提交到远程分支" class="headerlink" title="提交到远程分支"></a>提交到远程分支</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin branchName (提交到远程<span class="string">'branchName'</span>的分支)</span><br></pre></td></tr></table></figure>
+<h4 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rest --soft commintedId (回退到某一次的提交，可以重新修改)</span><br></pre></td></tr></table></figure>
+<h4 id="暂存"><a href="#暂存" class="headerlink" title="暂存"></a>暂存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git stash 与 git stash pop (缓存当前编辑的内容。Tips:日常开发过程中，通常会在不同的分支之间切换，当正处在某个分支下编辑并且暂时不想提交，可以 <span class="string">'git stash'</span> 缓存当前的修改。切换到别的分支，完成后切回并执行 <span class="string">'git stash pop'</span> 可以调出之前未完成的内容。)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="参考Git中文文档"><a href="#参考Git中文文档" class="headerlink" title="参考Git中文文档"></a>参考<a href="https://git-scm.com/book/zh/v2" target="_blank" rel="noopener">Git中文文档</a></h3>
           
         
       
