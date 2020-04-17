@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="JavaJava 开篇，ennnnnnnnnnm 具体写什么以后在说">
+<meta name="description" content="原子操作“不可中断的一个操作，或者一系列操作”–原子操作，一个操作要么成功要么失败，没有中间状态。 Java中的count++1.Java中count++与C++中count++操作不一样，在Java中此操作不是原子操作，包含了三个步骤：取值-&amp;gt;修改-&amp;gt;写入。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java">
-<meta property="og:url" content="http://jiam.pro/2018/06/05/Java/index.html">
+<meta property="og:title" content="多线程操作i++">
+<meta property="og:url" content="http://jiam.pro/2020/04/18/多线程操作i/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="JavaJava 开篇，ennnnnnnnnnm 具体写什么以后在说">
+<meta property="og:description" content="原子操作“不可中断的一个操作，或者一系列操作”–原子操作，一个操作要么成功要么失败，没有中间状态。 Java中的count++1.Java中count++与C++中count++操作不一样，在Java中此操作不是原子操作，包含了三个步骤：取值-&amp;gt;修改-&amp;gt;写入。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-06T10:37:51.761Z">
+<meta property="og:updated_time" content="2020-04-17T17:53:02.744Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java">
-<meta name="twitter:description" content="JavaJava 开篇，ennnnnnnnnnm 具体写什么以后在说">
+<meta name="twitter:title" content="多线程操作i++">
+<meta name="twitter:description" content="原子操作“不可中断的一个操作，或者一系列操作”–原子操作，一个操作要么成功要么失败，没有中间状态。 Java中的count++1.Java中count++与C++中count++操作不一样，在Java中此操作不是原子操作，包含了三个步骤：取值-&amp;gt;修改-&amp;gt;写入。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://jiam.pro/2018/06/05/Java/"/>
+  <link rel="canonical" href="http://jiam.pro/2020/04/18/多线程操作i/"/>
 
 
 
 
 
-  <title>Java | Sai</title>
+  <title>多线程操作i++ | Sai</title>
   
 
 
@@ -313,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2018/06/05/Java/">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/04/18/多线程操作i/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JiaM">
@@ -330,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java</h1>
+          <h1 class="post-title" itemprop="name headline">多线程操作i++</h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T13:34:52+08:00">
-                2018-06-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-18T01:08:54+08:00">
+                2020-04-18
               </time>
             
 
@@ -387,8 +387,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/05/Java/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/06/05/Java/" itemprop="commentsCount"></span>
+                <a href="/2020/04/18/多线程操作i/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/04/18/多线程操作i/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -416,8 +416,15 @@
       
 
       
-        <h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><p>Java 开篇，ennnnnnnnnnm 具体写什么以后在说</p>
-
+        <h3 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h3><p>“不可中断的一个操作，或者一系列操作”–原子操作，一个操作要么成功要么失败，没有中间状态。</p>
+<h4 id="Java中的count"><a href="#Java中的count" class="headerlink" title="Java中的count++"></a>Java中的<code>count++</code></h4><p>1.Java中<code>count++</code>与<code>C++</code>中<code>count++</code>操作不一样，在<code>Java</code>中此操作不是原子操作，包含了三个步骤：取值-&gt;修改-&gt;写入。</p>
+<a id="more"></a>
+<h3 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j++) &#123;</span><br><span class="line">                      increase();</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      count++;</span><br><span class="line">      Log.d(<span class="string">"MainActivity"</span>, count + <span class="string">""</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码，我们希望最终的打印结果为300，可是实际上，输出的结果是小于300。原因是<code>count++</code>并不是原子操作，那么通过哪几种方法可以得到预期的结果呢？</p>
+<h3 id="synchronized加锁"><a href="#synchronized加锁" class="headerlink" title="synchronized加锁"></a><code>synchronized</code>加锁</h3><p>通过<code>synchronized</code>关键字，将并行变成了串行操作，方法过重，效率低下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      count++;</span><br><span class="line">      Log.d(<span class="string">"MainActivity"</span>, count + <span class="string">""</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ReentrantLock重入锁"><a href="#ReentrantLock重入锁" class="headerlink" title="ReentrantLock重入锁"></a><code>ReentrantLock</code>重入锁</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span>  <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j++) &#123;</span><br><span class="line">                   lock.lock();</span><br><span class="line">                   <span class="keyword">try</span> &#123;</span><br><span class="line">                       count++;</span><br><span class="line">                       Log.d(<span class="string">"MainActivity"</span>, count + <span class="string">""</span>);</span><br><span class="line">                   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                       lock.unlock();</span><br><span class="line">                   &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AtomicIntegerJava自带原子操作类"><a href="#AtomicIntegerJava自带原子操作类" class="headerlink" title="AtomicIntegerJava自带原子操作类"></a><code>AtomicInteger</code>Java自带原子操作类</h3>
       
     </div>
     
@@ -477,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/05/Android/" rel="next" title="Android">
-                <i class="fa fa-chevron-left"></i> Android
+              <a href="/2020/04/17/Handler、MessageQueue、Looper解析/" rel="next" title="Handler、MessageQueue、Looper解析">
+                <i class="fa fa-chevron-left"></i> Handler、MessageQueue、Looper解析
               </a>
             
           </div>
@@ -486,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/05/Kotlin/" rel="prev" title="Kotlin">
-                Kotlin <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +651,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java"><span class="nav-number">1.</span> <span class="nav-text">Java</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作"><span class="nav-number">1.</span> <span class="nav-text">原子操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java中的count"><span class="nav-number">1.1.</span> <span class="nav-text">Java中的count++</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试代码"><span class="nav-number">2.</span> <span class="nav-text">测试代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized加锁"><span class="nav-number">3.</span> <span class="nav-text">synchronized加锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock重入锁"><span class="nav-number">4.</span> <span class="nav-text">ReentrantLock重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicIntegerJava自带原子操作类"><span class="nav-number">5.</span> <span class="nav-text">AtomicIntegerJava自带原子操作类</span></a></li></ol></div>
             
 
           </div>
