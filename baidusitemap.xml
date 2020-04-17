@@ -4,8 +4,30 @@
 
     
   <url>
+    <loc>http://jiam.pro/2020/04/17/Handler%E3%80%81MessageQueue%E3%80%81Looper%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2020-04-17T16:20:13.303Z</lastmod>
+    <data>
+        <display>
+        <title>Handler、MessageQueue、Looper解析</title>
+        <pubTime>2020-04-17T07:09:15.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>ResourceCode</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://jiam.pro/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://jiam.pro/2020/04/16/%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%9B%B4%E6%96%B0UI/</loc>
-    <lastmod>2020-04-16T08:15:33.252Z</lastmod>
+    <lastmod>2020-04-17T16:01:00.855Z</lastmod>
     <data>
         <display>
         <title>子线程中更新UI?</title>
