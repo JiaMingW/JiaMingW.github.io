@@ -1,1 +1,1 @@
-http://jiam.pro/2020/04/20/startActivity启动流程分析，Android-10/
+http://jiam.pro/2020/04/20/UI适配几种方案/
