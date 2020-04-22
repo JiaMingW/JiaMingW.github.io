@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://jiam.pro/about/index.html</loc>
+    
+    <lastmod>2020-04-22T08:46:28.153Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://jiam.pro/2020/04/20/UI%E9%80%82%E9%85%8D%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/</loc>
     
-    <lastmod>2020-04-22T06:22:14.146Z</lastmod>
+    <lastmod>2020-04-22T06:33:50.599Z</lastmod>
     
   </url>
   
@@ -159,13 +166,6 @@
     <loc>http://jiam.pro/2018/06/05/Android/</loc>
     
     <lastmod>2018-06-06T08:21:16.435Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://jiam.pro/about/index.html</loc>
-    
-    <lastmod>2018-06-06T08:14:13.898Z</lastmod>
     
   </url>
   
