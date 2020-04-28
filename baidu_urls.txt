@@ -1,1 +1,1 @@
-http://jiam.pro/2020/04/23/Android10-事件分发/
+http://jiam.pro/2020/04/27/几种单例模式/

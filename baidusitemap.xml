@@ -4,6 +4,62 @@
 
     
   <url>
+    <loc>http://jiam.pro/2020/04/26/UI%E7%9A%84%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2020-04-28T07:01:19.731Z</lastmod>
+    <data>
+        <display>
+        <title>UI的绘制流程</title>
+        <pubTime>2020-04-26T03:04:33.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://jiam.pro/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://jiam.pro/2020/04/27/%E5%87%A0%E7%A7%8D%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-04-27T08:51:10.532Z</lastmod>
+    <data>
+        <display>
+        <title>几种单例模式</title>
+        <pubTime>2020-04-27T07:40:30.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Java" url="http://jiam.pro/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://jiam.pro/2018/06/05/Java/</loc>
+    <lastmod>2020-04-27T01:35:20.716Z</lastmod>
+    <data>
+        <display>
+        <title>Java</title>
+        <pubTime>2018-06-05T05:34:52.000Z</pubTime>
+        
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://jiam.pro/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://jiam.pro/2020/04/23/Android10-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91/</loc>
     <lastmod>2020-04-26T02:56:53.456Z</lastmod>
     <data>
@@ -360,26 +416,6 @@
            
              
               <breadCrumb title="Git" url="http://jiam.pro/categories/Git/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://jiam.pro/2018/06/05/Java/</loc>
-    <lastmod>2018-06-06T10:37:51.761Z</lastmod>
-    <data>
-        <display>
-        <title>Java</title>
-        <pubTime>2018-06-05T05:34:52.000Z</pubTime>
-        
-        <tag>Java</tag>
-         
-         
-           
-             
-              <breadCrumb title="Java" url="http://jiam.pro/categories/Java/"/>
           
         </display>
     </data>

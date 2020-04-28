@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从setContentView()开始12345@Override  protected void onCreate(Bundle savedInstanceState) &amp;#123;      super.onCreate(savedInstanceState);      setContentView(R.layout.activity_main);&amp;#125; 1.当我们在Activity的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UI的绘制流程">
+<meta property="og:url" content="http://jiam.pro/2020/04/26/UI的绘制流程/index.html">
+<meta property="og:site_name" content="Sai">
+<meta property="og:description" content="从setContentView()开始12345@Override  protected void onCreate(Bundle savedInstanceState) &amp;#123;      super.onCreate(savedInstanceState);      setContentView(R.layout.activity_main);&amp;#125; 1.当我们在Activity的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/27/JWBqrn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/04/27/JWDEa6.png">
+<meta property="og:updated_time" content="2020-04-28T07:01:19.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UI的绘制流程">
+<meta name="twitter:description" content="从setContentView()开始12345@Override  protected void onCreate(Bundle savedInstanceState) &amp;#123;      super.onCreate(savedInstanceState);      setContentView(R.layout.activity_main);&amp;#125; 1.当我们在Activity的">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/04/27/JWBqrn.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jiam.pro/2020/04/26/UI的绘制流程/"/>
+
+
+
+
+
+  <title>UI的绘制流程 | Sai</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我有一壶酒 足以慰风尘</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-android">
+          <a href="/categories/Android/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-android"></i> <br />
+            
+            Android
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-java">
+          <a href="/categories/Java/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Java
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-kotlin">
+          <a href="/categories/Kotlin/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bug"></i> <br />
+            
+            Kotlin
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-git">
+          <a href="/categories/Git/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-git"></i> <br />
+            
+            Git
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-hexo">
+          <a href="/categories/Hexo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-envira"></i> <br />
+            
+            Hexo
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/04/26/UI的绘制流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JiaM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UI的绘制流程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-26T11:04:33+08:00">
+                2020-04-26
+              </time>
+            
+
+
+            
+               
+             
+
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/26/UI的绘制流程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/04/26/UI的绘制流程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="从setContentView-开始"><a href="#从setContentView-开始" class="headerlink" title="从setContentView()开始"></a>从setContentView()开始</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">      setContentView(R.layout.activity_main);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.当我们在<code>Activity</code>的<code>onCreate的setContentView()</code>方法中直接写入布局的ID，来看看这中间经历了什么从而加载到了我们的手机屏幕上。</p>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">Activity中</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(view);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> Window <span class="title">getWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> mWindow;</span><br><span class="line">&#125;</span><br><span class="line">由于Window为抽象类，并且只有唯一实现PhoneWindow，看PhoneWindow中的实现：</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span></span><br><span class="line">    <span class="comment">// decor, when theme attributes and the like are crystalized. Do not check the feature</span></span><br><span class="line">    <span class="comment">// before this happens.</span></span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//实例化decorview</span></span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        mContentParent.removeAllViews();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (hasFeature(FEATURE_CONTENT_TRANSITIONS)) &#123;</span><br><span class="line">        <span class="keyword">final</span> Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,</span><br><span class="line">                getContext());</span><br><span class="line">        transitionTo(newScene);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParent.requestApplyInsets();</span><br><span class="line">    <span class="keyword">final</span> Callback cb = getCallback();</span><br><span class="line">    <span class="keyword">if</span> (cb != <span class="keyword">null</span> &amp;&amp; !isDestroyed()) &#123;</span><br><span class="line">        cb.onContentChanged();</span><br><span class="line">    &#125;</span><br><span class="line">    mContentParentExplicitlySet = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mForceDecorInstall = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">//实例化了一个dectorview</span></span><br><span class="line">        mDecor = generateDecor(-<span class="number">1</span>);</span><br><span class="line">        mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);</span><br><span class="line">        mDecor.setIsRootNamespace(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">if</span> (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != <span class="number">0</span>) &#123;</span><br><span class="line">            mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        mDecor.setWindow(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">//资源的相关的初始化，包括根据开发者使用的一些主题theme</span></span><br><span class="line">        mContentParent = generateLayout(mDecor);</span><br><span class="line">      &#125;</span><br><span class="line">      ......</span><br><span class="line">&#125;</span><br><span class="line">PhoneWindow中的实现比较简单，主要功能就是创建这个decorview，也即顶层view，创建decorview涉及几个重要的方法：generateDecor()、generateLayout()</span><br></pre></td></tr></table></figure>
+<h4 id="generateDecor"><a href="#generateDecor" class="headerlink" title="generateDecor()"></a>generateDecor()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> DecorView <span class="title">generateDecor</span><span class="params">(<span class="keyword">int</span> featureId)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// System process doesn't have application context and in that case we need to directly use</span></span><br><span class="line">    <span class="comment">// the context we have. Otherwise we want the application context, so we don't cling to the</span></span><br><span class="line">    <span class="comment">// activity.</span></span><br><span class="line">    Context context;</span><br><span class="line">    <span class="keyword">if</span> (mUseDecorContext) &#123;</span><br><span class="line">        Context applicationContext = getContext().getApplicationContext();</span><br><span class="line">        <span class="keyword">if</span> (applicationContext == <span class="keyword">null</span>) &#123;</span><br><span class="line">            context = getContext();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            context = <span class="keyword">new</span> DecorContext(applicationContext, getContext());</span><br><span class="line">            <span class="keyword">if</span> (mTheme != -<span class="number">1</span>) &#123;</span><br><span class="line">                context.setTheme(mTheme);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        context = getContext();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DecorView(context, featureId, <span class="keyword">this</span>, getAttributes());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.方法比较简单，只是对dectorview进行了实例化操作，没有特别需要主要的点。</p>
+<h4 id="generateLayout"><a href="#generateLayout" class="headerlink" title="generateLayout()"></a>generateLayout()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">----省略----</span><br><span class="line">      <span class="keyword">int</span> layoutResource;</span><br><span class="line">      <span class="keyword">int</span> features = getLocalFeatures();</span><br><span class="line">      <span class="comment">// System.out.println("Features: 0x" + Integer.toHexString(features));</span></span><br><span class="line">      <span class="keyword">if</span> ((features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_SWIPE_TO_DISMISS)) != <span class="number">0</span>) &#123;</span><br><span class="line">          layoutResource = R.layout.screen_swipe_dismiss;</span><br><span class="line">          setCloseOnSwipeEnabled(<span class="keyword">true</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; ((<span class="number">1</span> &lt;&lt; FEATURE_LEFT_ICON) | (<span class="number">1</span> &lt;&lt; FEATURE_RIGHT_ICON))) != <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (mIsFloating) &#123;</span><br><span class="line">              TypedValue res = <span class="keyword">new</span> TypedValue();</span><br><span class="line">              getContext().getTheme().resolveAttribute(</span><br><span class="line">                      R.attr.dialogTitleIconsDecorLayout, res, <span class="keyword">true</span>);</span><br><span class="line">              layoutResource = res.resourceId;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              layoutResource = R.layout.screen_title_icons;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// XXX Remove this once action bar supports these features.</span></span><br><span class="line">          removeFeature(FEATURE_ACTION_BAR);</span><br><span class="line">          <span class="comment">// System.out.println("Title Icons!");</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; ((<span class="number">1</span> &lt;&lt; FEATURE_PROGRESS) | (<span class="number">1</span> &lt;&lt; FEATURE_INDETERMINATE_PROGRESS))) != <span class="number">0</span></span><br><span class="line">              &amp;&amp; (features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_ACTION_BAR)) == <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="comment">// Special case for a window with only a progress bar (and title).</span></span><br><span class="line">          <span class="comment">// XXX Need to have a no-title version of embedded windows.</span></span><br><span class="line">          layoutResource = R.layout.screen_progress;</span><br><span class="line">          <span class="comment">// System.out.println("Progress!");</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_CUSTOM_TITLE)) != <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="comment">// Special case for a window with a custom title.</span></span><br><span class="line">          <span class="comment">// If the window is floating, we need a dialog layout</span></span><br><span class="line">          <span class="keyword">if</span> (mIsFloating) &#123;</span><br><span class="line">              TypedValue res = <span class="keyword">new</span> TypedValue();</span><br><span class="line">              getContext().getTheme().resolveAttribute(</span><br><span class="line">                      R.attr.dialogCustomTitleDecorLayout, res, <span class="keyword">true</span>);</span><br><span class="line">              layoutResource = res.resourceId;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              layoutResource = R.layout.screen_custom_title;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// XXX Remove this once action bar supports these features.</span></span><br><span class="line">          removeFeature(FEATURE_ACTION_BAR);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_NO_TITLE)) == <span class="number">0</span>) &#123;</span><br><span class="line">          <span class="comment">// If no other features and not embedded, only need a title.</span></span><br><span class="line">          <span class="comment">// If the window is floating, we need a dialog layout</span></span><br><span class="line">          <span class="keyword">if</span> (mIsFloating) &#123;</span><br><span class="line">              TypedValue res = <span class="keyword">new</span> TypedValue();</span><br><span class="line">              getContext().getTheme().resolveAttribute(</span><br><span class="line">                      R.attr.dialogTitleDecorLayout, res, <span class="keyword">true</span>);</span><br><span class="line">              layoutResource = res.resourceId;</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_ACTION_BAR)) != <span class="number">0</span>) &#123;</span><br><span class="line">              layoutResource = a.getResourceId(</span><br><span class="line">                      R.styleable.Window_windowActionBarFullscreenDecorLayout,</span><br><span class="line">                      R.layout.screen_action_bar);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              layoutResource = R.layout.screen_title;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// System.out.println("Title!");</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((features &amp; (<span class="number">1</span> &lt;&lt; FEATURE_ACTION_MODE_OVERLAY)) != <span class="number">0</span>) &#123;</span><br><span class="line">          layoutResource = R.layout.screen_simple_overlay_action_mode;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// Embedded, so no decoration is needed.</span></span><br><span class="line">          layoutResource = R.layout.screen_simple;</span><br><span class="line">          <span class="comment">// System.out.println("Simple!");</span></span><br><span class="line">      &#125;</span><br><span class="line">      mDecor.startChanging();</span><br><span class="line">      mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</span><br><span class="line">      <span class="comment">//ID_ANDROID_CONTENT 重要的参数</span></span><br><span class="line">      ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">      <span class="keyword">if</span> (contentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Window couldn't find content container view"</span>);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>1.<code>layoutResource</code>：定义了一个资源布局，根据不同的主题，加载了不同layout资源文件，当然这属于系统内部的layout，也就是基础容器，不同的theme加载的layout是不同的。而我们还需要的关心的是，我们在设置setContentView(R.layout.xxxx)是如何被加载到屏幕上的。<br>2.在看<code>ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</code>之前，注意<code>mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</code>这个方法，对于基础容器decorview的一系列初始化完成之后，是通过addview，在基础容器创建了一个viewgroup，以便后续将我们自身的布局加载到这个viewgroup中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The ID that the main layout in the XML layout file should have.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="comment">//源码解释的很清楚，我们自身的layout资源id映射到系统的对应参数上。</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ID_ANDROID_CONTENT = com.android.internal.R.id.content;</span><br></pre></td></tr></table></figure></p>
+<p>3.以上即view被加载到窗口上的主要过程，主要关系图：<br><img src="https://s1.ax1x.com/2020/04/27/JWBqrn.png" alt="JWBqrn.png"><br>4.视图层级关系图：<br><img src="https://s1.ax1x.com/2020/04/27/JWDEa6.png" alt="JWDEa6.png"></p>
+<h3 id="ViewRootImpl"><a href="#ViewRootImpl" class="headerlink" title="ViewRootImpl"></a>ViewRootImpl</h3><p>1.在ActivityThread中，熟悉源码就会知道，<code>handleResumeActivity</code>是作为绘制的主入口。Window作为ViewRootImpl与Activity之间的桥梁起到了关键的作用。先看主要流程。</p>
+<h4 id="handleResumeActivity"><a href="#handleResumeActivity" class="headerlink" title="handleResumeActivity"></a>handleResumeActivity</h4><p>1.<code>wm.addView(decor, l); l = LayoutParams</code>，windowManager通过addView将decor与LayoutParams参数关联。而<code>WindowManagerImpl</code>继承自<code>WindowManager</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">WindowManagerImpl中</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addView</span><span class="params">(@NonNull View view, @NonNull ViewGroup.LayoutParams params)</span> </span>&#123;</span><br><span class="line">        applyDefaultToken(params);</span><br><span class="line">        mGlobal.addView(view, params, mContext.getDisplay(), mParentWindow);</span><br><span class="line">    &#125;</span><br><span class="line">    mGlobal = WindowManagerGlobal</span><br></pre></td></tr></table></figure></p>
+<p>2.<code>WindowManagerGlobal</code>的addview中对<code>ViewRootImpl</code>作了初始化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.....</span><br><span class="line">root = <span class="keyword">new</span> ViewRootImpl(view.getContext(), display);</span><br><span class="line">           view.setLayoutParams(wparams);</span><br><span class="line">           mViews.add(view);</span><br><span class="line">           mRoots.add(root);</span><br><span class="line">           mParams.add(wparams);</span><br><span class="line"></span><br><span class="line">           <span class="comment">// do this last because it fires off messages to start doing things</span></span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">             <span class="comment">//setView中关键方法requestlayout，就是我们所熟悉的主线程的检查，和scheduleTraversals()，这是进入绘制流程的前期准备工作。</span></span><br><span class="line">               root.setView(view, wparams, panelParentView);</span><br><span class="line">           &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">               <span class="comment">// BadTokenException or InvalidDisplayException, clean up.</span></span><br><span class="line">               <span class="keyword">if</span> (index &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                   removeViewLocked(index, <span class="keyword">true</span>);</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">throw</span> e;</span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="scheduleTraversals"><a href="#scheduleTraversals" class="headerlink" title="scheduleTraversals()"></a>scheduleTraversals()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">scheduleTraversals</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!mTraversalScheduled) &#123;</span><br><span class="line">        mTraversalScheduled = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">//还是handler消息机制，不过这里使用了同步屏障，同步屏障对同步方法有影响，对异步无效果，当handler接收到打上同步屏障的消息时，会暂停其他消息，优先处理此消息</span></span><br><span class="line">        <span class="comment">//目的也很明确---&gt;优先处理ui绘制</span></span><br><span class="line">        mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();</span><br><span class="line">        <span class="comment">//mTraversalRunnable实现了runnable接口</span></span><br><span class="line">        mChoreographer.postCallback(</span><br><span class="line">                Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">if</span> (!mUnbufferedInputDispatch) &#123;</span><br><span class="line">            scheduleConsumeBatchedInput();</span><br><span class="line">        &#125;</span><br><span class="line">        notifyRendererOfFramePending();</span><br><span class="line">        pokeDrawLockIfNeeded();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">final</span> TraversalRunnable mTraversalRunnable = <span class="keyword">new</span> TraversalRunnable();</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">TraversalRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        doTraversal();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doTraversal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mTraversalScheduled) &#123;</span><br><span class="line">        mTraversalScheduled = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//移除同步屏障，其他同步方法得以继续执行</span></span><br><span class="line">        mHandler.getLooper().getQueue().removeSyncBarrier(mTraversalBarrier);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mProfile) &#123;</span><br><span class="line">            Debug.startMethodTracing(<span class="string">"ViewAncestor"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//从这里开始真正进入view的绘制流程</span></span><br><span class="line">        performTraversals();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mProfile) &#123;</span><br><span class="line">            Debug.stopMethodTracing();</span><br><span class="line">            mProfile = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.经过分析得出，View绘制的前期工作流程很清晰：</span><br><span class="line">ActivityThread.handleResumeActivity()--&gt;</span><br><span class="line">[WindowManager.addView()]WindowManagerImpl.addView()--&gt;</span><br><span class="line">WindowManagerGlobal.addView()--&gt;</span><br><span class="line">ViewRootImpl.addview()--&gt;</span><br><span class="line">ViewRootImpl.setView()--&gt;</span><br><span class="line">ViewRootImpl.requestLayout()--&gt;</span><br><span class="line">ViewRootImpl.scheduleTraversals()--&gt;</span><br><span class="line">ViewRootImpl.doTraversal()--&gt;</span><br><span class="line">ViewRootImpl.performTraversals()--&gt;</span><br><span class="line">开始view的绘制流程。</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span>.进一步划分，绘制入口：</span><br><span class="line">ActivityThread.handleResumeActivity()、</span><br><span class="line">[WindowManager.addView()]WindowManagerImpl.addView()、</span><br><span class="line">WindowManagerGlobal.addView()、ViewRootImpl.addview()。</span><br><span class="line">绘制的类及相关方法：</span><br><span class="line">ViewRootImpl.setView()、</span><br><span class="line">ViewRootImpl.requestLayout()、</span><br><span class="line">ViewRootImpl.scheduleTraversals()、</span><br><span class="line">ViewRootImpl.doTraversal()、</span><br><span class="line">ViewRootImpl.performTraversals()。</span><br><span class="line">绘制的步骤：</span><br><span class="line">ViewRootImpl.performMeasure()、</span><br><span class="line">ViewRootImpl.performLayout()、</span><br><span class="line">ViewRootImpl.performDraw()。</span><br></pre></td></tr></table></figure>
+<h3 id="measure"><a href="#measure" class="headerlink" title="measure()"></a>measure()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">ViewRootImpl</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">performMeasure</span><span class="params">(<span class="keyword">int</span> childWidthMeasureSpec, <span class="keyword">int</span> childHeightMeasureSpec)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mView == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Trace.traceBegin(Trace.TRACE_TAG_VIEW, <span class="string">"measure"</span>);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//mView也就是decorview，而decorview继承了framelayout，在measure方法调用了 onMeasure(widthMeasureSpec, heightMeasureSpec);</span></span><br><span class="line">      <span class="comment">//继续看framelayout中的onMeasure方法</span></span><br><span class="line">        mView.measure(childWidthMeasureSpec, childHeightMeasureSpec);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Trace.traceEnd(Trace.TRACE_TAG_VIEW);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">....</span><br><span class="line"><span class="keyword">if</span> (cacheIndex &lt; <span class="number">0</span> || sIgnoreMeasureCache) &#123;</span><br><span class="line">               <span class="comment">// measure ourselves, this should set the measured dimension flag back</span></span><br><span class="line">               <span class="comment">//测量自身，确定大小保存并返回，由于decorview属于容器布局，因此查看framelayout中的相关方法onMeasure</span></span><br><span class="line">               onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">               mPrivateFlags3 &amp;= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">long</span> value = mMeasureCache.valueAt(cacheIndex);</span><br><span class="line">               <span class="comment">// Casting a long to int drops the high 32 bits, no mask needed</span></span><br><span class="line">               setMeasuredDimensionRaw((<span class="keyword">int</span>) (value &gt;&gt; <span class="number">32</span>), (<span class="keyword">int</span>) value);</span><br><span class="line">               mPrivateFlags3 |= PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">           &#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>先看<code>MeasureSpec</code>源码中解释：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * MeasureSpecs are implemented as ints to reduce object allocation. This class</span></span><br><span class="line"><span class="comment"> * is provided to pack and unpack the &amp;lt;size, mode&amp;gt; tuple into the int.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MeasureSpec</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MODE_SHIFT = <span class="number">30</span>;</span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MODE_MASK  = <span class="number">0x3</span> &lt;&lt; MODE_SHIFT;</span><br><span class="line">      <span class="comment">/** <span class="doctag">@hide</span> */</span></span><br><span class="line">      <span class="meta">@IntDef</span>(&#123;UNSPECIFIED, EXACTLY, AT_MOST&#125;)</span><br><span class="line">      <span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</span><br><span class="line">      <span class="keyword">public</span> <span class="meta">@interface</span> MeasureSpecMode &#123;&#125;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Measure specification mode: The parent has not imposed any constraint</span></span><br><span class="line"><span class="comment">       * on the child. It can be whatever size it wants.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNSPECIFIED = <span class="number">0</span> &lt;&lt; MODE_SHIFT;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Measure specification mode: The parent has determined an exact size</span></span><br><span class="line"><span class="comment">       * for the child. The child is going to be given those bounds regardless</span></span><br><span class="line"><span class="comment">       * of how big it wants to be.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXACTLY     = <span class="number">1</span> &lt;&lt; MODE_SHIFT;</span><br><span class="line">      <span class="comment">/**</span></span><br><span class="line"><span class="comment">       * Measure specification mode: The child can be as large as it wants up</span></span><br><span class="line"><span class="comment">       * to the specified size.</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> AT_MOST     = <span class="number">2</span> &lt;&lt; MODE_SHIFT;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">makeMeasureSpec</span><span class="params">(@IntRange(from = <span class="number">0</span>, to = (<span class="number">1</span> &lt;&lt; MeasureSpec.MODE_SHIFT)</span> - 1) <span class="keyword">int</span> size,</span></span><br><span class="line"><span class="function">                                        @MeasureSpecMode <span class="keyword">int</span> mode) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (sUseBrokenMakeMeasureSpec) &#123;</span><br><span class="line">              <span class="keyword">return</span> size + mode;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">return</span> (size &amp; ~MODE_MASK) | (mode &amp; MODE_MASK);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="meta">@UnsupportedAppUsage</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">makeSafeMeasureSpec</span><span class="params">(<span class="keyword">int</span> size, <span class="keyword">int</span> mode)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (sUseZeroUnspecifiedMeasureSpec &amp;&amp; mode == UNSPECIFIED) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> makeMeasureSpec(size, mode);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="meta">@MeasureSpecMode</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMode</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</span><br><span class="line">          <span class="comment">//noinspection ResourceType</span></span><br><span class="line">          <span class="keyword">return</span> (measureSpec &amp; MODE_MASK);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> (measureSpec &amp; ~MODE_MASK);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">adjust</span><span class="params">(<span class="keyword">int</span> measureSpec, <span class="keyword">int</span> delta)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">final</span> <span class="keyword">int</span> mode = getMode(measureSpec);</span><br><span class="line">          <span class="keyword">int</span> size = getSize(measureSpec);</span><br><span class="line">          <span class="keyword">if</span> (mode == UNSPECIFIED) &#123;</span><br><span class="line">              <span class="comment">// No need to adjust size for UNSPECIFIED mode.</span></span><br><span class="line">              <span class="keyword">return</span> makeMeasureSpec(size, UNSPECIFIED);</span><br><span class="line">          &#125;</span><br><span class="line">          size += delta;</span><br><span class="line">          <span class="keyword">if</span> (size &lt; <span class="number">0</span>) &#123;</span><br><span class="line">              Log.e(VIEW_LOG_TAG, <span class="string">"MeasureSpec.adjust: new size would be negative! ("</span> + size +</span><br><span class="line">                      <span class="string">") spec: "</span> + toString(measureSpec) + <span class="string">" delta: "</span> + delta);</span><br><span class="line">              size = <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> makeMeasureSpec(size, mode);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">toString</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> mode = getMode(measureSpec);</span><br><span class="line">          <span class="keyword">int</span> size = getSize(measureSpec);</span><br><span class="line"></span><br><span class="line">          StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">"MeasureSpec: "</span>);</span><br><span class="line">          <span class="keyword">if</span> (mode == UNSPECIFIED)</span><br><span class="line">              sb.append(<span class="string">"UNSPECIFIED "</span>);</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span> (mode == EXACTLY)</span><br><span class="line">              sb.append(<span class="string">"EXACTLY "</span>);</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span> (mode == AT_MOST)</span><br><span class="line">              sb.append(<span class="string">"AT_MOST "</span>);</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">              sb.append(mode).append(<span class="string">" "</span>);</span><br><span class="line"></span><br><span class="line">          sb.append(size);</span><br><span class="line">          <span class="keyword">return</span> sb.toString();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>1.<code>MeasureSpec</code>定义了三种模式<code>UNSPECIFIED、EXACTLY、EXACTLY</code>，也就是我们平时使用的<code>WRAP_CONTENT、MATCH_PARENT、dp、px</code>，将mode与size打包保存在<code>MeasureSpec</code>中。由于<code>int</code>有32位，取前两位作为mode，而后30位作为size。<br>2.Framelayout中的onMeasure方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//容器类的view测量，都需要层层遍历子view</span></span><br><span class="line">    <span class="keyword">int</span> count = getChildCount();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">boolean</span> measureMatchParentChildren =</span><br><span class="line">            MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.EXACTLY ||</span><br><span class="line">            MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY;</span><br><span class="line">    mMatchParentChildren.clear();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxHeight = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> maxWidth = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> childState = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">        <span class="keyword">final</span> View child = getChildAt(i);</span><br><span class="line">        <span class="keyword">if</span> (mMeasureAllChildren || child.getVisibility() != GONE) &#123;</span><br><span class="line">            measureChildWithMargins(child, widthMeasureSpec, <span class="number">0</span>, heightMeasureSpec, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">final</span> LayoutParams lp = (LayoutParams) child.getLayoutParams();</span><br><span class="line">            maxWidth = Math.max(maxWidth,</span><br><span class="line">                    child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);</span><br><span class="line">            maxHeight = Math.max(maxHeight,</span><br><span class="line">                    child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);</span><br><span class="line">            childState = combineMeasuredStates(childState, child.getMeasuredState());</span><br><span class="line">            <span class="keyword">if</span> (measureMatchParentChildren) &#123;</span><br><span class="line">                <span class="keyword">if</span> (lp.width == LayoutParams.MATCH_PARENT ||</span><br><span class="line">                        lp.height == LayoutParams.MATCH_PARENT) &#123;</span><br><span class="line">                    mMatchParentChildren.add(child);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Account for padding too</span></span><br><span class="line">    maxWidth += getPaddingLeftWithForeground() + getPaddingRightWithForeground();</span><br><span class="line">    maxHeight += getPaddingTopWithForeground() + getPaddingBottomWithForeground();</span><br><span class="line">    <span class="comment">// Check against our minimum height and width</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//测量子view后的最大宽高，包含了margin的值，padding，以及子view是否设置的最小宽高</span></span><br><span class="line">    maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());</span><br><span class="line">    maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check against our foreground's minimum height and width</span></span><br><span class="line">    <span class="keyword">final</span> Drawable drawable = getForeground();</span><br><span class="line">    <span class="keyword">if</span> (drawable != <span class="keyword">null</span>) &#123;</span><br><span class="line">        maxHeight = Math.max(maxHeight, drawable.getMinimumHeight());</span><br><span class="line">        maxWidth = Math.max(maxWidth, drawable.getMinimumWidth());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//测量子控件完成后，决定自身的宽高(ViewGroup)，并保存</span></span><br><span class="line">    setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState),</span><br><span class="line">            resolveSizeAndState(maxHeight, heightMeasureSpec,</span><br><span class="line">                    childState &lt;&lt; MEASURED_HEIGHT_STATE_SHIFT));</span><br><span class="line"></span><br><span class="line">    count = mMatchParentChildren.size();</span><br><span class="line">    <span class="keyword">if</span> (count &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            <span class="keyword">final</span> View child = mMatchParentChildren.get(i);</span><br><span class="line">            <span class="keyword">final</span> MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> childWidthMeasureSpec;</span><br><span class="line">            <span class="keyword">if</span> (lp.width == LayoutParams.MATCH_PARENT) &#123;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">int</span> width = Math.max(<span class="number">0</span>, getMeasuredWidth()</span><br><span class="line">                        - getPaddingLeftWithForeground() - getPaddingRightWithForeground()</span><br><span class="line">                        - lp.leftMargin - lp.rightMargin);</span><br><span class="line">                childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(</span><br><span class="line">                        width, MeasureSpec.EXACTLY);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec,</span><br><span class="line">                        getPaddingLeftWithForeground() + getPaddingRightWithForeground() +</span><br><span class="line">                        lp.leftMargin + lp.rightMargin,</span><br><span class="line">                        lp.width);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> childHeightMeasureSpec;</span><br><span class="line">            <span class="keyword">if</span> (lp.height == LayoutParams.MATCH_PARENT) &#123;</span><br><span class="line">                <span class="keyword">final</span> <span class="keyword">int</span> height = Math.max(<span class="number">0</span>, getMeasuredHeight()</span><br><span class="line">                        - getPaddingTopWithForeground() - getPaddingBottomWithForeground()</span><br><span class="line">                        - lp.topMargin - lp.bottomMargin);</span><br><span class="line">                childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(</span><br><span class="line">                        height, MeasureSpec.EXACTLY);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec,</span><br><span class="line">                        getPaddingTopWithForeground() + getPaddingBottomWithForeground() +</span><br><span class="line">                        lp.topMargin + lp.bottomMargin,</span><br><span class="line">                        lp.height);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//走到这里还是调用measure方法，也即递归操作，对于子view如果是viewgroup还是走一遍以上的逻辑，直到全部测量完成，在我们实际开发过程中，可想而知如果view的层级过深，是不利于性能的。因为测量是一个递归遍历操作。</span></span><br><span class="line">            child.measure(childWidthMeasureSpec, childHeightMeasureSpec);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">View中：</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;This method must be called by &#123;<span class="doctag">@link</span> #onMeasure(int, int)&#125; to store the</span></span><br><span class="line"><span class="comment">    * measured width and measured height. Failing to do so will trigger an</span></span><br><span class="line"><span class="comment">    * exception at measurement time.&lt;/p&gt;</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> measuredWidth The measured width of this view.  May be a complex</span></span><br><span class="line"><span class="comment">    * bit mask as defined by &#123;<span class="doctag">@link</span> #MEASURED_SIZE_MASK&#125; and</span></span><br><span class="line"><span class="comment">    * &#123;<span class="doctag">@link</span> #MEASURED_STATE_TOO_SMALL&#125;.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> measuredHeight The measured height of this view.  May be a complex</span></span><br><span class="line"><span class="comment">    * bit mask as defined by &#123;<span class="doctag">@link</span> #MEASURED_SIZE_MASK&#125; and</span></span><br><span class="line"><span class="comment">    * &#123;<span class="doctag">@link</span> #MEASURED_STATE_TOO_SMALL&#125;.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">      setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),</span><br><span class="line">              getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));</span><br><span class="line">  &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setMeasuredDimension</span><span class="params">(<span class="keyword">int</span> measuredWidth, <span class="keyword">int</span> measuredHeight)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">boolean</span> optical = isLayoutModeOptical(<span class="keyword">this</span>);</span><br><span class="line">     <span class="keyword">if</span> (optical != isLayoutModeOptical(mParent)) &#123;</span><br><span class="line">         Insets insets = getOpticalInsets();</span><br><span class="line">         <span class="keyword">int</span> opticalWidth  = insets.left + insets.right;</span><br><span class="line">         <span class="keyword">int</span> opticalHeight = insets.top  + insets.bottom;</span><br><span class="line"></span><br><span class="line">         measuredWidth  += optical ? opticalWidth  : -opticalWidth;</span><br><span class="line">         measuredHeight += optical ? opticalHeight : -opticalHeight;</span><br><span class="line">     &#125;</span><br><span class="line">     setMeasuredDimensionRaw(measuredWidth, measuredHeight);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getDefaultSize</span><span class="params">(<span class="keyword">int</span> size, <span class="keyword">int</span> measureSpec)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> result = size;</span><br><span class="line">     <span class="keyword">int</span> specMode = MeasureSpec.getMode(measureSpec);</span><br><span class="line">     <span class="keyword">int</span> specSize = MeasureSpec.getSize(measureSpec);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">switch</span> (specMode) &#123;</span><br><span class="line">     <span class="keyword">case</span> MeasureSpec.UNSPECIFIED:</span><br><span class="line">         result = size;</span><br><span class="line">         <span class="keyword">break</span>;</span><br><span class="line">         <span class="comment">////当我们自定义view时，可见如果不在onmeasure重写，决定自己的宽高，那么设置matchparent与wrapcontent效果是一样的。</span></span><br><span class="line">     <span class="keyword">case</span> MeasureSpec.AT_MOST:</span><br><span class="line">     <span class="keyword">case</span> MeasureSpec.EXACTLY:</span><br><span class="line">         result = specSize;</span><br><span class="line">         <span class="keyword">break</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> result;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="layout"><a href="#layout" class="headerlink" title="layout()"></a>layout()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//确定了自身的上下左右的位置</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">layout</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ((mPrivateFlags3 &amp; PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT) != <span class="number">0</span>) &#123;</span><br><span class="line">            onMeasure(mOldWidthMeasureSpec, mOldHeightMeasureSpec);</span><br><span class="line">            mPrivateFlags3 &amp;= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> oldL = mLeft;</span><br><span class="line">        <span class="keyword">int</span> oldT = mTop;</span><br><span class="line">        <span class="keyword">int</span> oldB = mBottom;</span><br><span class="line">        <span class="keyword">int</span> oldR = mRight;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> changed = isLayoutModeOptical(mParent) ?</span><br><span class="line">                setOpticalFrame(l, t, r, b) : setFrame(l, t, r, b);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (changed || (mPrivateFlags &amp; PFLAG_LAYOUT_REQUIRED) == PFLAG_LAYOUT_REQUIRED) &#123;</span><br><span class="line">            onLayout(changed, l, t, r, b);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (shouldDrawRoundScrollbar()) &#123;</span><br><span class="line">                <span class="keyword">if</span>(mRoundScrollbarRenderer == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    mRoundScrollbarRenderer = <span class="keyword">new</span> RoundScrollbarRenderer(<span class="keyword">this</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mRoundScrollbarRenderer = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            mPrivateFlags &amp;= ~PFLAG_LAYOUT_REQUIRED;</span><br><span class="line">            ListenerInfo li = mListenerInfo;</span><br><span class="line">            <span class="keyword">if</span> (li != <span class="keyword">null</span> &amp;&amp; li.mOnLayoutChangeListeners != <span class="keyword">null</span>) &#123;</span><br><span class="line">                ArrayList&lt;OnLayoutChangeListener&gt; listenersCopy =</span><br><span class="line">                        (ArrayList&lt;OnLayoutChangeListener&gt;)li.mOnLayoutChangeListeners.clone();</span><br><span class="line">                <span class="keyword">int</span> numListeners = listenersCopy.size();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numListeners; ++i) &#123;</span><br><span class="line">                    listenersCopy.get(i).onLayoutChange(<span class="keyword">this</span>, l, t, r, b, oldL, oldT, oldR, oldB);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> wasLayoutValid = isLayoutValid();</span><br><span class="line"></span><br><span class="line">        mPrivateFlags &amp;= ~PFLAG_FORCE_LAYOUT;</span><br><span class="line">        mPrivateFlags3 |= PFLAG3_IS_LAID_OUT;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!wasLayoutValid &amp;&amp; isFocused()) &#123;</span><br><span class="line">            mPrivateFlags &amp;= ~PFLAG_WANTS_FOCUS;</span><br><span class="line">            <span class="keyword">if</span> (canTakeFocus()) &#123;</span><br><span class="line">                <span class="comment">// We have a robust focus, so parents should no longer be wanting focus.</span></span><br><span class="line">                clearParentsWantFocus();</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (getViewRootImpl() == <span class="keyword">null</span> || !getViewRootImpl().isInLayout()) &#123;</span><br><span class="line">                <span class="comment">// This is a weird case. Most-likely the user, rather than ViewRootImpl, called</span></span><br><span class="line">                <span class="comment">// layout. In this case, there's no guarantee that parent layouts will be evaluated</span></span><br><span class="line">                <span class="comment">// and thus the safest action is to clear focus here.</span></span><br><span class="line">                clearFocusInternal(<span class="keyword">null</span>, <span class="comment">/* propagate */</span> <span class="keyword">true</span>, <span class="comment">/* refocus */</span> <span class="keyword">false</span>);</span><br><span class="line">                clearParentsWantFocus();</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!hasParentWantsFocus()) &#123;</span><br><span class="line">                <span class="comment">// original requestFocus was likely on this view directly, so just clear focus</span></span><br><span class="line">                clearFocusInternal(<span class="keyword">null</span>, <span class="comment">/* propagate */</span> <span class="keyword">true</span>, <span class="comment">/* refocus */</span> <span class="keyword">false</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// otherwise, we let parents handle re-assigning focus during their layout passes.</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((mPrivateFlags &amp; PFLAG_WANTS_FOCUS) != <span class="number">0</span>) &#123;</span><br><span class="line">            mPrivateFlags &amp;= ~PFLAG_WANTS_FOCUS;</span><br><span class="line">            View focused = findFocus();</span><br><span class="line">            <span class="keyword">if</span> (focused != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// Try to restore focus as close as possible to our starting focus.</span></span><br><span class="line">                <span class="keyword">if</span> (!restoreDefaultFocus() &amp;&amp; !hasParentWantsFocus()) &#123;</span><br><span class="line">                    <span class="comment">// Give up and clear focus once we've reached the top-most parent which wants</span></span><br><span class="line">                    <span class="comment">// focus.</span></span><br><span class="line">                    focused.clearFocusInternal(<span class="keyword">null</span>, <span class="comment">/* propagate */</span> <span class="keyword">true</span>, <span class="comment">/* refocus */</span> <span class="keyword">false</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((mPrivateFlags3 &amp; PFLAG3_NOTIFY_AUTOFILL_ENTER_ON_LAYOUT) != <span class="number">0</span>) &#123;</span><br><span class="line">            mPrivateFlags3 &amp;= ~PFLAG3_NOTIFY_AUTOFILL_ENTER_ON_LAYOUT;</span><br><span class="line">            notifyEnterOrExitForAutoFillIfNeeded(<span class="keyword">true</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//onLayout方法默认是空实现，如果是容器view则需要重写此方法，摆放子view的位置，如果是普通view即不实现</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">在framelayout中：</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span> </span>&#123;</span><br><span class="line">       layoutChildren(left, top, right, bottom, <span class="keyword">false</span> <span class="comment">/* no force left gravity */</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.view的布局比较简单，调用view.layout()，确定left、right、top、bottom的值，也即确定自身的位置。</span><br><span class="line"><span class="number">2</span>.layout()方法的内调用了onLayout()方法。onLayout()默认是空实现，而对于viewgroup需要重写确定子view的位置。</span><br></pre></td></tr></table></figure>
+<h3 id="draw"><a href="#draw" class="headerlink" title="draw()"></a>draw()</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">绘制方法相对比较简单</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Draw traversal performs several drawing steps which must be executed</span></span><br><span class="line"><span class="comment"> * in the appropriate order:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      1. Draw the background</span></span><br><span class="line"><span class="comment"> *      2. If necessary, save the canvas' layers to prepare for fading</span></span><br><span class="line"><span class="comment"> *      3. Draw view's content</span></span><br><span class="line"><span class="comment"> *      4. Draw children</span></span><br><span class="line"><span class="comment"> *      5. If necessary, draw the fading edges and restore layers</span></span><br><span class="line"><span class="comment"> *      6. Draw decorations (scrollbars for instance)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="number">1</span>.绘制背景drabackground</span><br><span class="line"> <span class="number">2</span>.绘制自身ondraw</span><br><span class="line"> <span class="number">3</span>.绘制子view，dispatchDraw</span><br><span class="line"> <span class="number">4</span>.绘制滚动条等装饰</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>这个功能是摆设，看看就好～～～</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="JiaM 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="JiaM 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/23/Android10-事件分发/" rel="next" title="Android10-事件分发">
+                <i class="fa fa-chevron-left"></i> Android10-事件分发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/27/几种单例模式/" rel="prev" title="几种单例模式">
+                几种单例模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg"
+                alt="JiaM" />
+            
+              <p class="site-author-name" itemprop="name">JiaM</p>
+              <p class="site-description motion-element" itemprop="description">人生不就是这般</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/JiaMingW" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:jiamvip@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#从setContentView-开始"><span class="nav-number">1.</span> <span class="nav-text">从setContentView()开始</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#generateDecor"><span class="nav-number">1.1.</span> <span class="nav-text">generateDecor()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#generateLayout"><span class="nav-number">1.2.</span> <span class="nav-text">generateLayout()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewRootImpl"><span class="nav-number">2.</span> <span class="nav-text">ViewRootImpl</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#handleResumeActivity"><span class="nav-number">2.1.</span> <span class="nav-text">handleResumeActivity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scheduleTraversals"><span class="nav-number">2.2.</span> <span class="nav-text">scheduleTraversals()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">2.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#measure"><span class="nav-number">3.</span> <span class="nav-text">measure()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#layout"><span class="nav-number">4.</span> <span class="nav-text">layout()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#draw"><span class="nav-number">5.</span> <span class="nav-text">draw()</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JiaM</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Power by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Themes-<a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位小伙伴
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+var bp = document.createElement('script');
+var curProtocol = window.location.protocol.split(':')[0];
+if (curProtocol === 'https') {
+bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+}
+else {
+bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+}
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'JiaMingW',
+            repo: 'gitment_comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '2434041ad3fd2a6d75a3119ad2b4e23b4224a2ae',
+            
+                client_id: '89ae2f5044c241d23cfd'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>
