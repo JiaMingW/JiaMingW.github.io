@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Sai">
 <meta property="og:description" content="前述1.三个Activity，A、B、C、其中AB的启动模式为standard，C的启动模式为singleInstance，A–B–C依次启动后，按下home键与back键操作，分析调用的生命周期方法。2.要分析所执行的生命周期方法首先要对Android的启动模式有所了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-07T09:47:05.357Z">
+<meta property="og:updated_time" content="2020-05-08T06:45:21.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity启动模式">
 <meta name="twitter:description" content="前述1.三个Activity，A、B、C、其中AB的启动模式为standard，C的启动模式为singleInstance，A–B–C依次启动后，按下home键与back键操作，分析调用的生命周期方法。2.要分析所执行的生命周期方法首先要对Android的启动模式有所了解。">
@@ -434,7 +434,18 @@
 <p>唯一实例：加强singleTask，单独栈，同样的如果已经存在实例，回调onNewInntent()方法。单个实例(单个栈)。</p>
 </blockquote>
 <h4 id="FLAG-ACTIVITY-NEW-TASK"><a href="#FLAG-ACTIVITY-NEW-TASK" class="headerlink" title="FLAG_ACTIVITY_NEW_TASK"></a>FLAG_ACTIVITY_NEW_TASK</h4><blockquote>
+<p>If set, this activity will become the start of a new task on this history stack。这是官网的解释，被启动Activity将会是目标task的根Activity。非Activity启动的Activity需要显示的设置此标志位，主要侧重点在于task。多配合taskAffinity使用，假设有task1与task2两个栈。将要启动的Activity(A)的taskAffinity为task2。<br>1.A与task2都未创建，则创建task2，实例化A，移动到前台。<br>2.task2已经存在，并且不含有A的实例，如果task2在后台栈，则task2被置于前台，A被创建压入栈顶。如果task2已经位于前台，则直接创建A置于栈顶。<br>3.task2与A都已经存在，如果A为task2的根Activity，此时若task2，位于后台，则会被移动到前台，A不在被创建；如果A不是根Activity则重新创建A。</p>
 </blockquote>
+<h4 id="FLAG-ACTIVITY-CLEAR-TASK"><a href="#FLAG-ACTIVITY-CLEAR-TASK" class="headerlink" title="FLAG_ACTIVITY_CLEAR_TASK"></a>FLAG_ACTIVITY_CLEAR_TASK</h4><blockquote>
+<p>配合FLAG_ACTIVITY_NEW_TASK一起使用，目标栈task已经存在，则清空栈，将要被创建的Activity作为根Activity，目标栈不存在则创建。</p>
+</blockquote>
+<h4 id="FLAG-ACTIVITY-CLEAR-TOP"><a href="#FLAG-ACTIVITY-CLEAR-TOP" class="headerlink" title="FLAG_ACTIVITY_CLEAR_TOP"></a>FLAG_ACTIVITY_CLEAR_TOP</h4><blockquote>
+<p>清空目标Activity上的所有Activity，如果目标Activity没有设置可复用的launchMode，则finish后重新创建在入栈，也即是目标Activity是否复用看情况而定。</p>
+</blockquote>
+<h4 id="FLAG-ACTIVITY-SINGLE-TOP"><a href="#FLAG-ACTIVITY-SINGLE-TOP" class="headerlink" title="FLAG_ACTIVITY_SINGLE_TOP"></a>FLAG_ACTIVITY_SINGLE_TOP</h4><blockquote>
+<p>类似于launchMode中设置的singleTop。</p>
+</blockquote>
+<h3 id="分析上述问题中的ABC生命周期"><a href="#分析上述问题中的ABC生命周期" class="headerlink" title="分析上述问题中的ABC生命周期"></a>分析上述问题中的ABC生命周期</h3><p>1.由于C为singleInstance，启动C之后按下home，从桌面launch图标点击此时出现的会是什么页面？答案是A或者B。首先，AB存在与同一个task，当被切入后台时，有可能被系统回收(在Api-R模拟器下测试发现)。启动C之后按下home键，AB被销毁后台task被系统回收，而Api-R以下的模拟器Api-28并没有销毁后台栈。此时按下launch图标出现的就是B页面。<br>2.在C页面按back键返回的是B页面。没什么特别的。<br>3.上述问题若改为B为singleInstance，依次启动。首先，可以明确的是AC是同一个task栈，而B单独一个task。所以当在C页面按下home键后在从launch图标点击时，此时出现的还是C，AC所在的栈被重新移动到前台(未销毁的情况)。若按back键，则返回A(AC同一个栈)。若在B页面按home与back的情况就不再赘述，分析此类问题其实就是对后台、前台任务栈的理解。</p>
 
       
     </div>
@@ -669,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前述"><span class="nav-number">1.</span> <span class="nav-text">前述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android的启动模式"><span class="nav-number">2.</span> <span class="nav-text">Android的启动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#standard"><span class="nav-number">2.1.</span> <span class="nav-text">standard</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleTop"><span class="nav-number">2.2.</span> <span class="nav-text">singleTop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleTask"><span class="nav-number">2.3.</span> <span class="nav-text">singleTask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleInstance"><span class="nav-number">2.4.</span> <span class="nav-text">singleInstance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FLAG-ACTIVITY-NEW-TASK"><span class="nav-number">2.5.</span> <span class="nav-text">FLAG_ACTIVITY_NEW_TASK</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前述"><span class="nav-number">1.</span> <span class="nav-text">前述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android的启动模式"><span class="nav-number">2.</span> <span class="nav-text">Android的启动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#standard"><span class="nav-number">2.1.</span> <span class="nav-text">standard</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleTop"><span class="nav-number">2.2.</span> <span class="nav-text">singleTop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleTask"><span class="nav-number">2.3.</span> <span class="nav-text">singleTask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#singleInstance"><span class="nav-number">2.4.</span> <span class="nav-text">singleInstance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FLAG-ACTIVITY-NEW-TASK"><span class="nav-number">2.5.</span> <span class="nav-text">FLAG_ACTIVITY_NEW_TASK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FLAG-ACTIVITY-CLEAR-TASK"><span class="nav-number">2.6.</span> <span class="nav-text">FLAG_ACTIVITY_CLEAR_TASK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FLAG-ACTIVITY-CLEAR-TOP"><span class="nav-number">2.7.</span> <span class="nav-text">FLAG_ACTIVITY_CLEAR_TOP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FLAG-ACTIVITY-SINGLE-TOP"><span class="nav-number">2.8.</span> <span class="nav-text">FLAG_ACTIVITY_SINGLE_TOP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析上述问题中的ABC生命周期"><span class="nav-number">3.</span> <span class="nav-text">分析上述问题中的ABC生命周期</span></a></li></ol></div>
             
 
           </div>
