@@ -4,16 +4,16 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/07/Activity%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2020-05-08T06:45:21.328Z</lastmod>
+    <loc>http://jiam.pro/2020/05/07/MVC%E3%80%81MVP%E3%80%81MVVM/</loc>
+    <lastmod>2020-05-11T02:58:15.058Z</lastmod>
     <data>
         <display>
-        <title>Activity启动模式</title>
-        <pubTime>2020-05-07T07:14:53.000Z</pubTime>
+        <title>MVC、MVP、MVVM</title>
+        <pubTime>2020-05-07T07:17:28.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>ResourceCode</tag>
+        <tag>设计模式</tag>
          
          
            
@@ -26,16 +26,16 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/07/MVC%E3%80%81MVP%E3%80%81MVVM/</loc>
-    <lastmod>2020-05-08T03:21:55.010Z</lastmod>
+    <loc>http://jiam.pro/2020/05/07/Activity%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2020-05-08T06:45:21.328Z</lastmod>
     <data>
         <display>
-        <title>MVC、MVP、MVVM</title>
-        <pubTime>2020-05-07T07:17:28.000Z</pubTime>
+        <title>Activity启动模式</title>
+        <pubTime>2020-05-07T07:14:53.000Z</pubTime>
         
         <tag>Android</tag>
          
-        <tag>设计模式</tag>
+        <tag>ResourceCode</tag>
          
          
            
