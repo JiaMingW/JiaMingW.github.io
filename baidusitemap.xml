@@ -4,14 +4,16 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/11/Android%E4%B8%AD%E7%9A%84%E5%8A%A8%E7%94%BB/</loc>
-    <lastmod>2020-05-14T03:37:10.403Z</lastmod>
+    <loc>http://jiam.pro/2020/05/13/Glide%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/</loc>
+    <lastmod>2020-05-14T03:40:12.006Z</lastmod>
     <data>
         <display>
-        <title>Android中的动画</title>
-        <pubTime>2020-05-11T06:11:21.000Z</pubTime>
+        <title>Glide中的缓存策略</title>
+        <pubTime>2020-05-13T05:53:42.000Z</pubTime>
         
         <tag>Android</tag>
+         
+        <tag>Library</tag>
          
          
            
@@ -24,16 +26,14 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/13/Glide%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/</loc>
-    <lastmod>2020-05-14T03:29:01.518Z</lastmod>
+    <loc>http://jiam.pro/2020/05/11/Android%E4%B8%AD%E7%9A%84%E5%8A%A8%E7%94%BB/</loc>
+    <lastmod>2020-05-14T03:37:10.403Z</lastmod>
     <data>
         <display>
-        <title>Glide中的缓存策略</title>
-        <pubTime>2020-05-13T05:53:42.000Z</pubTime>
+        <title>Android中的动画</title>
+        <pubTime>2020-05-11T06:11:21.000Z</pubTime>
         
         <tag>Android</tag>
-         
-        <tag>Library</tag>
          
          
            
