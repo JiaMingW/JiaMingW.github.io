@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Library," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="先来看看LinkedHashMap1.Glide的LruCache基于LinkedHashMap实现，最近最少使用，我们需要关心的是如何对数据进行保存删除，并按照这个策略实现存储的。2.LinkedHashMap中几个重要方法：12345678910111213/**  * The head (eldest) of the doubly linked list.  */  //这里定义了头部节点，">
+<meta name="keywords" content="Android,Library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Glide中的缓存策略">
+<meta property="og:url" content="http://jiam.pro/2020/05/13/Glide中的缓存策略/index.html">
+<meta property="og:site_name" content="Sai">
+<meta property="og:description" content="先来看看LinkedHashMap1.Glide的LruCache基于LinkedHashMap实现，最近最少使用，我们需要关心的是如何对数据进行保存删除，并按照这个策略实现存储的。2.LinkedHashMap中几个重要方法：12345678910111213/**  * The head (eldest) of the doubly linked list.  */  //这里定义了头部节点，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/14/Y0nZ2d.md.png">
+<meta property="og:updated_time" content="2020-05-14T03:29:01.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glide中的缓存策略">
+<meta name="twitter:description" content="先来看看LinkedHashMap1.Glide的LruCache基于LinkedHashMap实现，最近最少使用，我们需要关心的是如何对数据进行保存删除，并按照这个策略实现存储的。2.LinkedHashMap中几个重要方法：12345678910111213/**  * The head (eldest) of the doubly linked list.  */  //这里定义了头部节点，">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/05/14/Y0nZ2d.md.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jiam.pro/2020/05/13/Glide中的缓存策略/"/>
+
+
+
+
+
+  <title>Glide中的缓存策略 | Sai</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我有一壶酒 足以慰风尘</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-android">
+          <a href="/categories/Android/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-android"></i> <br />
+            
+            Android
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-java">
+          <a href="/categories/Java/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Java
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-kotlin">
+          <a href="/categories/Kotlin/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bug"></i> <br />
+            
+            Kotlin
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-git">
+          <a href="/categories/Git/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-git"></i> <br />
+            
+            Git
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-hexo">
+          <a href="/categories/Hexo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-envira"></i> <br />
+            
+            Hexo
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/05/13/Glide中的缓存策略/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JiaM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Glide中的缓存策略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-13T13:53:42+08:00">
+                2020-05-13
+              </time>
+            
+
+
+            
+               
+             
+
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/13/Glide中的缓存策略/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/05/13/Glide中的缓存策略/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="先来看看LinkedHashMap"><a href="#先来看看LinkedHashMap" class="headerlink" title="先来看看LinkedHashMap"></a>先来看看LinkedHashMap</h3><p>1.Glide的LruCache基于LinkedHashMap实现，最近最少使用，我们需要关心的是如何对数据进行保存删除，并按照这个策略实现存储的。<br>2.LinkedHashMap中几个重要方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * The head (eldest) of the doubly linked list.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="comment">//这里定义了头部节点，按照注释即为最不常用的</span></span><br><span class="line"> <span class="keyword">transient</span> LinkedHashMapEntry&lt;K,V&gt; head;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * The tail (youngest) of the doubly linked list.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="comment">//同样的尾节点，即最近使用的</span></span><br><span class="line"> <span class="keyword">transient</span> LinkedHashMapEntry&lt;K,V&gt; tail;</span><br><span class="line"> <span class="comment">//是否排序，默认是false的</span></span><br><span class="line"> <span class="keyword">final</span> <span class="keyword">boolean</span> accessOrder;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>3.回到Glide的使用场景，当我们在使用一张图片时，<code>cache.get(key)</code>，通过这个<code>get</code>操作来看看LinkedHashMap对数据做了什么改变。<br>4.LinkedHashMap中的get方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; e;</span><br><span class="line">    <span class="keyword">if</span> ((e = getNode(hash(key), key)) == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//LruCache中accessOrder是为true的</span></span><br><span class="line">    <span class="keyword">if</span> (accessOrder)</span><br><span class="line">        afterNodeAccess(e);</span><br><span class="line">    <span class="keyword">return</span> e.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// move node to last将数据node移动到最后，看看是怎样实现的</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">afterNodeAccess</span><span class="params">(Node&lt;K,V&gt; e)</span> </span>&#123;</span><br><span class="line">        LinkedHashMapEntry&lt;K,V&gt; last;</span><br><span class="line">        <span class="comment">//这里对被需要取的数据做了一次判断，判断元素e是否为tail节点，因为tail节点我们是知道的，可以直接获得</span></span><br><span class="line">        <span class="keyword">if</span> (accessOrder &amp;&amp; (last = tail) != e) &#123;</span><br><span class="line">            LinkedHashMapEntry&lt;K,V&gt; p =</span><br><span class="line">                (LinkedHashMapEntry&lt;K,V&gt;)e, b = p.before, a = p.after;</span><br><span class="line">            p.after = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (b == <span class="keyword">null</span>)</span><br><span class="line">                head = a;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                b.after = a;</span><br><span class="line">            <span class="keyword">if</span> (a != <span class="keyword">null</span>)</span><br><span class="line">                a.before = b;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                last = b;</span><br><span class="line">            <span class="keyword">if</span> (last == <span class="keyword">null</span>)</span><br><span class="line">                head = p;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                p.before = last;</span><br><span class="line">                last.after = p;</span><br><span class="line">            &#125;</span><br><span class="line">            tail = p;</span><br><span class="line">            ++modCount;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="当被待取的元素为头节点-链表中四个元素"><a href="#当被待取的元素为头节点-链表中四个元素" class="headerlink" title="当被待取的元素为头节点(链表中四个元素)"></a>当被待取的元素为头节点(链表中四个元素)</h4><p>1.定义了变量p接收待取元素e，主要就是节点的打开与重链。假设待取元素p=head，b=p.before =head.before = null; a=p.after = head.after,将p.after置为空(元素被使用即将元素移动到队尾，也即为tail，而tail.after = null)。<br>2.因为b=null，将头节点改为a-&gt;head = a;(a为第二个元素)，既然a变为新的头节点，a.before = b = null;<br>3.p.before = last;(last为tail),last.after=p,到此p被成功移动到队尾作为新的tail节点.<br><a href="https://imgchr.com/i/Y0nZ2d" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/14/Y0nZ2d.md.png" alt="Y0nZ2d.md.png"></a></p>
+<h4 id="当被待取元素为中间节点"><a href="#当被待取元素为中间节点" class="headerlink" title="当被待取元素为中间节点"></a>当被待取元素为中间节点</h4><p>1.移动的操作更加简单，只是加待取的节点的after置空，并将before节点指向原来的tail节点；置空之前拿到待取节点前后两个元素，将这两个元素进行联系。</p>
+<h3 id="Glide中的LruCache"><a href="#Glide中的LruCache" class="headerlink" title="Glide中的LruCache"></a>Glide中的LruCache</h3><p>1.方法很简单，直接看代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LruCache</span>&lt;<span class="title">T</span>, <span class="title">Y</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">//默认的容量为100，并开启了accessOrder=true，加载因子</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;T, Entry&lt;Y&gt;&gt; cache = <span class="keyword">new</span> LinkedHashMap&lt;&gt;(<span class="number">100</span>, <span class="number">0.75f</span>, <span class="keyword">true</span>);</span><br><span class="line">  <span class="comment">//初始化构造方法中的传入size</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> initialMaxSize;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> maxSize;</span><br><span class="line">  <span class="comment">//当前size</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> currentSize;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">LruCache</span><span class="params">(<span class="keyword">long</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.initialMaxSize = size;</span><br><span class="line">    <span class="keyword">this</span>.maxSize = size;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//这个方法需要子类实现，glide中既然保存的是图片，得到的即为当张图片的大小，bytes[]数组</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">(@Nullable Y item)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * A callback called whenever an item is evicted from the cache. Subclasses can override.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param</span> key The key of the evicted item.</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param</span> item The evicted item.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="comment">//cache中删除较老的item时会回调这个方法，子类需要重写</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onItemEvicted</span><span class="params">(@NonNull T key, @Nullable Y item)</span> </span>&#123;</span><br><span class="line">   <span class="comment">// optional override</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.添加元素：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//既然用户缓存图片，那么以图片为例</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Y <span class="title">put</span><span class="params">(@NonNull T key, @Nullable Y item)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//获得待添加图片的大小bytes[]</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> itemSize = getSize(item);</span><br><span class="line">    <span class="comment">//比最大容量还要大，显然是不能添加进去</span></span><br><span class="line">    <span class="keyword">if</span> (itemSize &gt;= maxSize) &#123;</span><br><span class="line">      onItemEvicted(key, item);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//currentSize = currentSize + itemSize，更新了当前已存size自增更新(此时还是小于阀值的)</span></span><br><span class="line">    <span class="keyword">if</span> (item != <span class="keyword">null</span>) &#123;</span><br><span class="line">      currentSize += itemSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span> Entry&lt;Y&gt; old = cache.put(key, item == <span class="keyword">null</span> ? <span class="keyword">null</span> : <span class="keyword">new</span> Entry&lt;&gt;(item, itemSize));</span><br><span class="line">    <span class="keyword">if</span> (old != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="comment">//添加此张图片到caChe中，返回一张(old!=null)，也就是说待添加的图片对应的key已经存在了，那么要做的就是更新key对应的值value</span></span><br><span class="line">      <span class="comment">//由于添加之前做了自增操作，由于是覆盖了原始值，那么这里要减去old value的大小</span></span><br><span class="line">      currentSize -= old.size;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!old.value.equals(item)) &#123;</span><br><span class="line">        onItemEvicted(key, old.value);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    evict();</span><br><span class="line">    <span class="keyword">return</span> old != <span class="keyword">null</span> ? old.value : <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">evict</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    trimToSize(maxSize);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Removes the least recently used items from the cache until the current size is less than the</span></span><br><span class="line"><span class="comment"> * given size.</span></span><br><span class="line"><span class="comment"> *  </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> size The size the cache should be less than.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">trimToSize</span><span class="params">(<span class="keyword">long</span> size)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//这个命名不联系注释，很多人以为是最后一个数据，网上很多这种说法，很明显这种说法是错误的</span></span><br><span class="line">  <span class="comment">//这里的last相当于最后被使用的意思(最近最少使用)，注释也说明了Removes the least recently used，并且是从头部节点开始做删除操作</span></span><br><span class="line">  <span class="comment">//cacheIterator = cache.entrySet().iterator(); last = cacheIterator.next();</span></span><br><span class="line">  Map.Entry&lt;T, Entry&lt;Y&gt;&gt; last;</span><br><span class="line">  Iterator&lt;Map.Entry&lt;T, Entry&lt;Y&gt;&gt;&gt; cacheIterator;</span><br><span class="line">  <span class="comment">//对容量的控制，直到当前的容量小于最大值maxSize为止</span></span><br><span class="line">  <span class="keyword">while</span> (currentSize &gt; size) &#123;</span><br><span class="line">    <span class="comment">//并且是从头节点开始做删除操作。</span></span><br><span class="line">    cacheIterator = cache.entrySet().iterator();</span><br><span class="line">    last = cacheIterator.next();</span><br><span class="line">    <span class="keyword">final</span> Entry&lt;Y&gt; toRemove = last.getValue();</span><br><span class="line">    currentSize -= toRemove.size;</span><br><span class="line">    <span class="keyword">final</span> T key = last.getKey();</span><br><span class="line">    cacheIterator.remove();</span><br><span class="line">    onItemEvicted(key, toRemove.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.Glide中的LruCache还是比较简单的，总结：增加数据时，判断待添加的元素大小与maxSzie作对比，maxSize作为容量的阀值，当currentSize大于阀值时，作删除操作(从头部节点开始)。对于元素的操作保留了空方法<code>onItemEvicted</code>用于子类实现相应的逻辑。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>这个功能是摆设，看看就好～～～</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="JiaM 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="JiaM 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tags"></i> Android</a>
+          
+
+            <a href="/tags/Library/" rel="tag"><i class="fa fa-tags"></i> Library</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/11/Android中的动画/" rel="next" title="Android中的动画">
+                <i class="fa fa-chevron-left"></i> Android中的动画
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg"
+                alt="JiaM" />
+            
+              <p class="site-author-name" itemprop="name">JiaM</p>
+              <p class="site-description motion-element" itemprop="description">人生不就是这般</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/JiaMingW" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:jiamvip@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来看看LinkedHashMap"><span class="nav-number">1.</span> <span class="nav-text">先来看看LinkedHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#当被待取的元素为头节点-链表中四个元素"><span class="nav-number">1.1.</span> <span class="nav-text">当被待取的元素为头节点(链表中四个元素)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当被待取元素为中间节点"><span class="nav-number">1.2.</span> <span class="nav-text">当被待取元素为中间节点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Glide中的LruCache"><span class="nav-number">2.</span> <span class="nav-text">Glide中的LruCache</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JiaM</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Power by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Themes-<a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位小伙伴
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+var bp = document.createElement('script');
+var curProtocol = window.location.protocol.split(':')[0];
+if (curProtocol === 'https') {
+bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+}
+else {
+bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+}
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'JiaMingW',
+            repo: 'gitment_comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '2434041ad3fd2a6d75a3119ad2b4e23b4224a2ae',
+            
+                client_id: '89ae2f5044c241d23cfd'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>
