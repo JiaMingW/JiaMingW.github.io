@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Library," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="BitmapPool1.Glide对图片做了很好的缓存实现，也是基于Lru的思想来实现的。而主要的实现类在GroupedLinkedMap中，另外需要注意的是，这里保存的是Bitmap的尺寸信息并不是具体的Bitmap对象。注释里也给出了相应的说明。2.接口BitmapPool的实现类LruBitmapPool处理了图片的缓存操作以及具体的逻辑，Lru思想的具体实现在GroupedLinkedMa">
+<meta name="keywords" content="Android,Library">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Glide中的GroupedLinkedMap">
+<meta property="og:url" content="http://jiam.pro/2020/05/19/Glide中的GroupedLinkedMap/index.html">
+<meta property="og:site_name" content="Sai">
+<meta property="og:description" content="BitmapPool1.Glide对图片做了很好的缓存实现，也是基于Lru的思想来实现的。而主要的实现类在GroupedLinkedMap中，另外需要注意的是，这里保存的是Bitmap的尺寸信息并不是具体的Bitmap对象。注释里也给出了相应的说明。2.接口BitmapPool的实现类LruBitmapPool处理了图片的缓存操作以及具体的逻辑，Lru思想的具体实现在GroupedLinkedMa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/19/YICKXT.md.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/19/YIehDI.md.png">
+<meta property="og:updated_time" content="2020-05-19T11:10:01.028Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Glide中的GroupedLinkedMap">
+<meta name="twitter:description" content="BitmapPool1.Glide对图片做了很好的缓存实现，也是基于Lru的思想来实现的。而主要的实现类在GroupedLinkedMap中，另外需要注意的是，这里保存的是Bitmap的尺寸信息并不是具体的Bitmap对象。注释里也给出了相应的说明。2.接口BitmapPool的实现类LruBitmapPool处理了图片的缓存操作以及具体的逻辑，Lru思想的具体实现在GroupedLinkedMa">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/05/19/YICKXT.md.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jiam.pro/2020/05/19/Glide中的GroupedLinkedMap/"/>
+
+
+
+
+
+  <title>Glide中的GroupedLinkedMap | Sai</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我有一壶酒 足以慰风尘</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-android">
+          <a href="/categories/Android/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-android"></i> <br />
+            
+            Android
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-java">
+          <a href="/categories/Java/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            Java
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-kotlin">
+          <a href="/categories/Kotlin/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bug"></i> <br />
+            
+            Kotlin
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-git">
+          <a href="/categories/Git/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-git"></i> <br />
+            
+            Git
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-hexo">
+          <a href="/categories/Hexo" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-envira"></i> <br />
+            
+            Hexo
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/05/19/Glide中的GroupedLinkedMap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JiaM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Glide中的GroupedLinkedMap</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-19T16:23:35+08:00">
+                2020-05-19
+              </time>
+            
+
+
+            
+               
+             
+
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/19/Glide中的GroupedLinkedMap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/05/19/Glide中的GroupedLinkedMap/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="BitmapPool"><a href="#BitmapPool" class="headerlink" title="BitmapPool"></a>BitmapPool</h3><p>1.Glide对图片做了很好的缓存实现，也是基于Lru的思想来实现的。而主要的实现类在<code>GroupedLinkedMap</code>中，另外需要注意的是，这里保存的是<code>Bitmap</code>的尺寸信息并不是具体的<code>Bitmap</code>对象。注释里也给出了相应的说明。<br>2.接口BitmapPool的实现类<code>LruBitmapPool</code>处理了图片的缓存操作以及具体的逻辑，<code>Lru</code>思想的具体实现在<code>GroupedLinkedMap</code>中。<br><a id="more"></a></p>
+<h3 id="GroupedLinkedMap"><a href="#GroupedLinkedMap" class="headerlink" title="GroupedLinkedMap"></a>GroupedLinkedMap</h3><p>1.官方注释中解释了保存的是<code>Bitmap</code>的尺寸位图信息，保存具体的<code>Bitmap</code>对象显然是不合适的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Similar to &#123;<span class="doctag">@link</span> java.util.LinkedHashMap&#125; when access ordered except that it is access ordered</span></span><br><span class="line"><span class="comment"> * on groups of bitmaps rather than individual objects. The idea is to be able to find the LRU</span></span><br><span class="line"><span class="comment"> * bitmap size, rather than the LRU bitmap object. We can then remove bitmaps from the least</span></span><br><span class="line"><span class="comment"> * recently used size of bitmap when we need to reduce our cache size.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;For the purposes of the LRU, we count gets for a particular size of bitmap as an access, even</span></span><br><span class="line"><span class="comment"> * if no bitmaps of that size are present. We do not count addition or removal of bitmaps as an</span></span><br><span class="line"><span class="comment"> * access.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure></p>
+<p>2.<code>GroupedLinkedMap</code>中维护了一个head头节点，实现了双向循环链表；并将节点的信息对应<code>key</code>的方式保存在<code>Map</code>中。看看具体实现来分析：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Poolable</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">offer</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GroupedLinkedMap</span>&lt;<span class="title">K</span> <span class="keyword">extends</span> <span class="title">Poolable</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * head节点的next与prev指向本身--&gt;</span></span><br><span class="line"><span class="comment">   * next = prev = head;key = null</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> LinkedEntry&lt;K, V&gt; head = <span class="keyword">new</span> LinkedEntry&lt;&gt;();</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;K, LinkedEntry&lt;K, V&gt;&gt; keyToEntry = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    LinkedEntry&lt;K, V&gt; entry = keyToEntry.get(key);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">      entry = <span class="keyword">new</span> LinkedEntry&lt;&gt;(key);</span><br><span class="line">      makeTail(entry);</span><br><span class="line">      keyToEntry.put(key, entry);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      key.offer();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    entry.add(value);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Nullable</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">    LinkedEntry&lt;K, V&gt; entry = keyToEntry.get(key);</span><br><span class="line">    <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">      entry = <span class="keyword">new</span> LinkedEntry&lt;&gt;(key);</span><br><span class="line">      keyToEntry.put(key, entry);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      key.offer();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    makeHead(entry);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> entry.removeLast();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Nullable</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * LinkedEntry-&gt;双向循环链表的结构，head.prev相当于tail节点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    LinkedEntry&lt;K, V&gt; last = head.prev;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!last.equals(head)) &#123;</span><br><span class="line">      V removed = last.removeLast();</span><br><span class="line">      <span class="keyword">if</span> (removed != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> removed;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// We will clean up empty lru entries since they are likely to have been one off or</span></span><br><span class="line">        <span class="comment">// unusual sizes and</span></span><br><span class="line">        <span class="comment">// are not likely to be requested again so the gc thrash should be minimal. Doing so will</span></span><br><span class="line">        <span class="comment">// speed up our</span></span><br><span class="line">        <span class="comment">// removeLast operation in the future and prevent our linked list from growing to</span></span><br><span class="line">        <span class="comment">// arbitrarily large</span></span><br><span class="line">        <span class="comment">// sizes.</span></span><br><span class="line">        removeEntry(last);</span><br><span class="line">        keyToEntry.remove(last.key);</span><br><span class="line">        last.key.offer();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      last = last.prev;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">"GroupedLinkedMap( "</span>);</span><br><span class="line">    LinkedEntry&lt;K, V&gt; current = head.next;</span><br><span class="line">    <span class="keyword">boolean</span> hadAtLeastOneItem = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">while</span> (!current.equals(head)) &#123;</span><br><span class="line">      hadAtLeastOneItem = <span class="keyword">true</span>;</span><br><span class="line">      sb.append(<span class="string">'&#123;'</span>).append(current.key).append(<span class="string">':'</span>).append(current.size()).append(<span class="string">"&#125;, "</span>);</span><br><span class="line">      current = current.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (hadAtLeastOneItem) &#123;</span><br><span class="line">      sb.delete(sb.length() - <span class="number">2</span>, sb.length());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sb.append(<span class="string">" )"</span>).toString();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make the entry the most recently used item.</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeHead</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    removeEntry(entry);</span><br><span class="line">    entry.prev = head;</span><br><span class="line">    entry.next = head.next;</span><br><span class="line">    updateEntry(entry);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make the entry the least recently used item.</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeTail</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    removeEntry(entry);</span><br><span class="line">    entry.prev = head.prev;</span><br><span class="line">    entry.next = head;</span><br><span class="line">    updateEntry(entry);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">updateEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    entry.next.prev = entry;</span><br><span class="line">    entry.prev.next = entry;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">removeEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    entry.prev.next = entry.next;</span><br><span class="line">    entry.next.prev = entry.prev;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedEntry</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Synthetic</span> <span class="keyword">final</span> K key;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 以数组保存value的值，考虑key相同的情况，如果key相同value不同，也就是key对应多个value。</span></span><br><span class="line"><span class="comment">     * 获取的时候从数组最后一个元素依次向前</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;V&gt; values;</span><br><span class="line">    LinkedEntry&lt;K, V&gt; next;</span><br><span class="line">    LinkedEntry&lt;K, V&gt; prev;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Used only for the first item in the list which we will treat specially and which will not</span></span><br><span class="line">    <span class="comment">// contain a value.</span></span><br><span class="line">    LinkedEntry() &#123;</span><br><span class="line">      <span class="keyword">this</span>(<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    LinkedEntry(K key) &#123;</span><br><span class="line">      next = prev = <span class="keyword">this</span>;</span><br><span class="line">      <span class="keyword">this</span>.key = key;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">int</span> valueSize = size();</span><br><span class="line">      <span class="keyword">return</span> valueSize &gt; <span class="number">0</span> ? values.remove(valueSize - <span class="number">1</span>) : <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> values != <span class="keyword">null</span> ? values.size() : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(V value)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (values == <span class="keyword">null</span>) &#123;</span><br><span class="line">        values = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">      &#125;</span><br><span class="line">      values.add(value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="head节点"><a href="#head节点" class="headerlink" title="head节点"></a>head节点</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> LinkedEntry&lt;K, V&gt; head = <span class="keyword">new</span> LinkedEntry&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Used only for the first item in the list which we will treat specially and which will not</span></span><br><span class="line"><span class="comment">// contain a value.</span></span><br><span class="line"><span class="comment">//解释的也很清晰，这个head相当于虚拟节点，key=null，并且前驱与后继节点都指向了本身，特殊处理。这个地方对后面有较深的影响，先记住。</span></span><br><span class="line">LinkedEntry() &#123;</span><br><span class="line">  <span class="keyword">this</span>(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LinkedEntry(K key) &#123;</span><br><span class="line">  next = prev = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">this</span>.key = key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.关键信息，head节点(虚拟节点)next、prev指向本身且key为null。</p>
+<h3 id="put方法-put-makeTail"><a href="#put方法-put-makeTail" class="headerlink" title="put方法(put#makeTail)"></a>put方法(put#makeTail)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    LinkedEntry&lt;K, V&gt; entry = keyToEntry.get(key);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">        entry = <span class="keyword">new</span> LinkedEntry&lt;&gt;(key);</span><br><span class="line">        makeTail(entry);</span><br><span class="line">        keyToEntry.put(key, entry);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        key.offer();</span><br><span class="line">    &#125;</span><br><span class="line">    entry.add(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Make the entry the least recently used item.</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeTail</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    removeEntry(entry);</span><br><span class="line">    entry.prev = head.prev;</span><br><span class="line">    entry.next = head;</span><br><span class="line">    updateEntry(entry);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">removeEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    entry.prev.next = entry.next;</span><br><span class="line">    entry.next.prev = entry.prev;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">updateEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    entry.next.prev = entry;</span><br><span class="line">    entry.prev.next = entry;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="put方法完成了什么操作"><a href="#put方法完成了什么操作" class="headerlink" title="put方法完成了什么操作"></a>put方法完成了什么操作</h4><p>1.假设，我们现在需要添加第一个元素<code>P</code>，逐步分析。既然是新添加的那么<code>entry=keyToEntry.get(key)=null</code>，根据key新实例化了一个entry(P)。后续P被置为<code>tail</code>节点：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Make the entry the least recently used item.</span></span><br><span class="line"><span class="comment">//将entry设置为最近最少使用的条目，(放入GroupedLinkedMap中的图片是没在使用的，缓存用于重新使用)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">  LinkedEntry&lt;K, V&gt; entry = keyToEntry.get(key);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">    entry = <span class="keyword">new</span> LinkedEntry&lt;&gt;(key);</span><br><span class="line">    makeTail(entry);</span><br><span class="line">    keyToEntry.put(key, entry);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    key.offer();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  entry.add(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeTail</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//entry = p；</span></span><br><span class="line">    removeEntry(entry);</span><br><span class="line">    entry.prev = head.prev;</span><br><span class="line">    entry.next = head;</span><br><span class="line">    updateEntry(entry);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">removeEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//新增的p--&gt;next = prev = p.</span></span><br><span class="line">  entry.prev.next = entry.next;</span><br><span class="line">  entry.next.prev = entry.prev;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;K, V&gt; <span class="function"><span class="keyword">void</span> <span class="title">updateEntry</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">  entry.next.prev = entry;</span><br><span class="line">  entry.prev.next = entry;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.</p>
+<blockquote>
+<p>因为head.prev = head，entry.prev = head.prev = head; entry.next = head.<br>updateEntry(entry)中：entry.next.prev = head.prev = entry; entry.prev.next = head.next = entry<br>总结得：head.prev = entry head.next = entry; entry.prev = head entry.next = head.由此形成环.</p>
+</blockquote>
+<p>4.流程图：<br><a href="https://imgchr.com/i/YICKXT" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/19/YICKXT.md.png" alt="YICKXT.md.png"></a><br>5.每次执行put时，总会将新增的条目<code>item</code>添加<code>head</code>节点的前驱节点也即<code>head.pre(tail)</code>。形成了闭合的双向循环链表。如果key已经存在了，直接将value保存在<code>LinkedEntry</code>中的数组中，这个也很好理解，相同的key对应了不同value，跟map不同的时，这里没有采取覆盖的方式，而是都保存了起来。符合实际开发的场景。但这样做好不好就是具体业务来统一考虑了(key对应多value)。</p>
+<h4 id="get"><a href="#get" class="headerlink" title="get()"></a>get()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span> </span>&#123;</span><br><span class="line">  LinkedEntry&lt;K, V&gt; entry = keyToEntry.get(key);</span><br><span class="line">  <span class="keyword">if</span> (entry == <span class="keyword">null</span>) &#123;</span><br><span class="line">    entry = <span class="keyword">new</span> LinkedEntry&lt;&gt;(key);</span><br><span class="line">    keyToEntry.put(key, entry);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    key.offer();</span><br><span class="line">  &#125;</span><br><span class="line">  makeHead(entry);</span><br><span class="line">  <span class="keyword">return</span> entry.removeLast();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Make the entry the most recently used item.</span></span><br><span class="line"><span class="comment">//使条目最多使用</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">makeHead</span><span class="params">(LinkedEntry&lt;K, V&gt; entry)</span> </span>&#123;</span><br><span class="line">  removeEntry(entry);</span><br><span class="line">  entry.prev = head;</span><br><span class="line">  entry.next = head.next;</span><br><span class="line">  updateEntry(entry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.同样的，假设获取的资源P不存在：</p>
+<blockquote>
+<p>entry.prev = head; entry.next = head.next;<br>entry.next.prev = entry;entry.prev.next = entry;<br>调用get时，即将entry(不存在则新建)放入了后继节点–&gt;head.nnext.</p>
+</blockquote>
+<p>2.流程图：<br><a href="https://imgchr.com/i/YIehDI" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/19/YIehDI.md.png" alt="YIehDI.md.png"></a></p>
+<h4 id="removeLast"><a href="#removeLast" class="headerlink" title="removeLast()"></a>removeLast()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * LinkedEntry-&gt;双向循环链表的结构，head.prev相当于tail节点</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  LinkedEntry&lt;K, V&gt; last = head.prev;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (!last.equals(head)) &#123;</span><br><span class="line">    V removed = last.removeLast();</span><br><span class="line">    <span class="keyword">if</span> (removed != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> removed;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// We will clean up empty lru entries since they are likely to have been one off or</span></span><br><span class="line">      <span class="comment">// unusual sizes and</span></span><br><span class="line">      <span class="comment">// are not likely to be requested again so the gc thrash should be minimal. Doing so will</span></span><br><span class="line">      <span class="comment">// speed up our</span></span><br><span class="line">      <span class="comment">// removeLast operation in the future and prevent our linked list from growing to</span></span><br><span class="line">      <span class="comment">// arbitrarily large</span></span><br><span class="line">      <span class="comment">// sizes.</span></span><br><span class="line">      removeEntry(last);</span><br><span class="line"></span><br><span class="line">      keyToEntry.remove(last.key);</span><br><span class="line">      last.key.offer();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    last = last.prev;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">int</span> valueSize = size();</span><br><span class="line">  <span class="keyword">return</span> valueSize &gt; <span class="number">0</span> ? values.remove(valueSize - <span class="number">1</span>) : <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> values != <span class="keyword">null</span> ? values.size() : <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1.head在初始化的时候，我们是知道对应的key=null，也即head中是不保存的value的。<br>2.假设<code>GroupedLinkedMap</code>只有一个数据，也即<code>head.prev</code>，head的前驱节点，while循环中removed != null成立直接返回removed。此时删除的为LinkedEntry持有数组中的value，但是此时节点还是存在的。只是value被删除了。<br>3.在2的基础上再次删除，removed != null = false;走else中逻辑，处理节点，并且删除map中key。而last = last.prev;(假设只有一个数据)：</p>
+<blockquote>
+<p>last = last.prev = head.此时跳出while循环。</p>
+</blockquote>
+<h3 id="以上"><a href="#以上" class="headerlink" title="以上"></a>以上</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>这个功能是摆设，看看就好～～～</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="JiaM 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="JiaM 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+
+            <a href="/tags/Android/" rel="tag"><i class="fa fa-tags"></i> Android</a>
+          
+
+            <a href="/tags/Library/" rel="tag"><i class="fa fa-tags"></i> Library</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/13/Glide中的缓存策略/" rel="next" title="Glide中的缓存策略">
+                <i class="fa fa-chevron-left"></i> Glide中的缓存策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://s1.ax1x.com/2020/04/16/Jkq5yF.th.jpg"
+                alt="JiaM" />
+            
+              <p class="site-author-name" itemprop="name">JiaM</p>
+              <p class="site-description motion-element" itemprop="description">人生不就是这般</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/JiaMingW" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:jiamvip@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitmapPool"><span class="nav-number">1.</span> <span class="nav-text">BitmapPool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GroupedLinkedMap"><span class="nav-number">2.</span> <span class="nav-text">GroupedLinkedMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#head节点"><span class="nav-number">3.</span> <span class="nav-text">head节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#put方法-put-makeTail"><span class="nav-number">4.</span> <span class="nav-text">put方法(put#makeTail)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#put方法完成了什么操作"><span class="nav-number">4.1.</span> <span class="nav-text">put方法完成了什么操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get"><span class="nav-number">4.2.</span> <span class="nav-text">get()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#removeLast"><span class="nav-number">4.3.</span> <span class="nav-text">removeLast()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以上"><span class="nav-number">5.</span> <span class="nav-text">以上</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JiaM</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Power by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Themes-<a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位小伙伴
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+<script>
+(function(){
+var bp = document.createElement('script');
+var curProtocol = window.location.protocol.split(':')[0];
+if (curProtocol === 'https') {
+bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+}
+else {
+bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+}
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'JiaMingW',
+            repo: 'gitment_comments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '2434041ad3fd2a6d75a3119ad2b4e23b4224a2ae',
+            
+                client_id: '89ae2f5044c241d23cfd'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+
+</body>
+</html>
