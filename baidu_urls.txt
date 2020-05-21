@@ -1,1 +1,1 @@
-http://jiam.pro/2020/05/19/Glide中的GroupedLinkedMap/
+http://jiam.pro/2020/05/20/Retrofit-动态代理/
