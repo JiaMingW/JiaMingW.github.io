@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo,blog," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
-<meta name="keywords" content="Hexo,blog">
+<meta name="description" content="从泛型擦除说起1.Java从1.5开始引入了泛型，泛型-也就是参数化类型。在Java容器类中大量的使用了泛型这种思想。泛型的利用好处很多：  减少了代码中大量的强制性类型转换，可读性更高通用性更强，类型更安全，提高性能等">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac环境下基于Hexo+GitHubPages搭建个人博客(一)">
-<meta property="og:url" content="http://jiam.pro/2018/06/07/Hexo-开篇/index.html">
+<meta property="og:title" content="Java中泛型extends与super的区别">
+<meta property="og:url" content="http://jiam.pro/2020/05/25/Java中泛型extends与super的区别/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
+<meta property="og:description" content="从泛型擦除说起1.Java从1.5开始引入了泛型，泛型-也就是参数化类型。在Java容器类中大量的使用了泛型这种思想。泛型的利用好处很多：  减少了代码中大量的强制性类型转换，可读性更高通用性更强，类型更安全，提高性能等">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://jiam.pro/images/default_hexo.jpg">
-<meta property="og:updated_time" content="2018-07-02T09:09:53.472Z">
+<meta property="og:updated_time" content="2020-05-25T09:36:01.242Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac环境下基于Hexo+GitHubPages搭建个人博客(一)">
-<meta name="twitter:description" content="前言&amp;emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。 &amp;emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然">
-<meta name="twitter:image" content="http://jiam.pro/images/default_hexo.jpg">
+<meta name="twitter:title" content="Java中泛型extends与super的区别">
+<meta name="twitter:description" content="从泛型擦除说起1.Java从1.5开始引入了泛型，泛型-也就是参数化类型。在Java容器类中大量的使用了泛型这种思想。泛型的利用好处很多：  减少了代码中大量的强制性类型转换，可读性更高通用性更强，类型更安全，提高性能等">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://jiam.pro/2018/06/07/Hexo-开篇/"/>
+  <link rel="canonical" href="http://jiam.pro/2020/05/25/Java中泛型extends与super的区别/"/>
 
 
 
 
 
-  <title>Mac环境下基于Hexo+GitHubPages搭建个人博客(一) | Sai</title>
+  <title>Java中泛型extends与super的区别 | Sai</title>
   
 
 
@@ -315,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2018/06/07/Hexo-开篇/">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/05/25/Java中泛型extends与super的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JiaM">
@@ -332,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Mac环境下基于Hexo+GitHubPages搭建个人博客(一)</h1>
+          <h1 class="post-title" itemprop="name headline">Java中泛型extends与super的区别</h1>
         
 
         <div class="post-meta">
@@ -344,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T17:33:06+08:00">
-                2018-06-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-25T15:39:06+08:00">
+                2020-05-25
               </time>
             
 
@@ -373,8 +371,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">Hexo</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -391,8 +389,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/07/Hexo-开篇/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/06/07/Hexo-开篇/" itemprop="commentsCount"></span>
+                <a href="/2020/05/25/Java中泛型extends与super的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/05/25/Java中泛型extends与super的区别/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -420,25 +418,23 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;一直以来都想搭建一个自己个人博客，方便记录工作中遇到过的、填过的坑。也许对某一个技术要点，或者对某一问题看到或想到了很好的解决办法，当时可能熟记于心，时间一长可能就忘到九霄云外了。没有一个自我总结的过程，总是觉得缺少点什么。。。</p>
-<p>&emsp;看到过很多优秀的个人博客，越发想自己搭建一个，了解后才知道有现成的框架，作为一名码畜，不动手显然不是码畜的风格。当然搭建的过程中也踩了不少坑，仅此记录下来，或许能给他人一些帮助，不胜欣慰。</p>
+        <h3 id="从泛型擦除说起"><a href="#从泛型擦除说起" class="headerlink" title="从泛型擦除说起"></a>从泛型擦除说起</h3><p>1.<code>Java</code>从1.5开始引入了泛型，泛型-也就是参数化类型。在<code>Java</code>容器类中大量的使用了泛型这种思想。泛型的利用好处很多：</p>
+<blockquote>
+<p>减少了代码中大量的强制性类型转换，可读性更高<br>通用性更强，<br>类型更安全，提高性能等</p>
+</blockquote>
 <a id="more"></a>
-<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>1.Xcode 安装(Mac上基本都自带了)</p>
-<p>2.Git，这个直接用的终端，问题不大，没有按照其他教程安装(Windows环境需要安装<a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a>)</p>
-<p>3.Node.js安装，直接去官网下载最新的安装包<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a></p>
-<h2 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h2><p>1.环境配置好后，就可以安装<a href="https://hexo.io/zh-cn/docs/index.html" target="_blank" rel="noopener">Hexo</a>了，因为Hexo不断在更新，所以还是建议按照官网流程走。</p>
-<p>打开终端执行以下命令安装Hexo:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
-<p>Tips:可能会要求输入密码(登录密码)</p>
-<h2 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h2><p>1.新建一个文件夹用来初始化Hexo文件</p>
-<p>2.打开终端 <em>cd</em> 到文件夹目录下执行命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
-<p>3.以上安装工作已经结束，接着生成静态文件:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate (hexo g)</span><br></pre></td></tr></table></figure>
-<p>4.静态页面生成后，开启本地预览，执行:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server (hexo s)</span><br></pre></td></tr></table></figure></p>
-<p>5.浏览器输入 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 可以预览,如下图:</p>
-<p><img src="/images/default_hexo.jpg" alt=""></p>
-<p>6.如此，本地的Hexo已经可以正常跑起来了，接下来就是发布到Github上了，强烈建议，申请一个个人域名，这里在操作的时候也遇到了坑，可以先从阿里云申请域名<a href="https://wanwang.aliyun.com/?utm_content=se_882117&amp;gclid=CjwKCAjwr-PYBRB8EiwALtjbz_948P-a_skvr3Nw0r9do3UalC8ozEZa9NIjZzz9Ew5LIqaPdTTjrRoCDa8QAvD_BwE" target="_blank" rel="noopener">阿里云</a>;不过需要审核，需要耐心等待。因为不知道情况，腾讯云也注册了一个，有点浪费～～～。看个人喜好，这里是入口:<a href="https://dnspod.cloud.tencent.com/?fromSource=gwzcw.426584.426584.426584&amp;gclid=CjwKCAjwr-PYBRB8EiwALtjbz7tn6YJgGD6NFSMJeOJ7nVac0TS46psWy5ECUMDz4GY9V1wHHTlpDRoCU1IQAvD_BwE" target="_blank" rel="noopener">腾讯云</a></p>
+<p>2.需要明确的是<code>Java</code>的泛型是伪泛型，泛型只在编译时期有效，在编译器正确的检验出泛型的结果后随即泛型的信息就会被擦除。并且泛型的信息不会进入到运行时阶段。看一个栗子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">     List&lt;Integer&gt; integers = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">     integers.add(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">     List&lt;String&gt; strings = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">     strings.add(<span class="string">"1"</span>);</span><br><span class="line"></span><br><span class="line">     System.out.println(integers.getClass().equals(strings.getClass()));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure></p>
+<p>3.泛型信息被擦除成原始的<code>List</code>，在实际开发中，泛型擦除会带来一些问题，既然运用了无界泛型，并且由于泛型擦除的存在，那么只能调用<code>Object</code>的自身方法。这个时候我们就需要给泛型指定边界，将泛型限制在一定的范围。</p>
+<h3 id="上界通配符-lt-extends-T-gt"><a href="#上界通配符-lt-extends-T-gt" class="headerlink" title="上界通配符&lt;? extends T&gt;"></a>上界通配符&lt;? extends T&gt;</h3><p>1.上界，顾名思义，最高只能到<code>T</code>，也即类型只能是<code>T</code>或者是<code>T的子类</code>。以水果这个常见的类型举例，水果，热带水果，苹果，橘子，香蕉等。可见水果作为整个超类依次往下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TropicalFruit</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>&#123;<span class="comment">/** 热带水果 */</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">TropicalFruit</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedApple</span> <span class="keyword">extends</span> <span class="title">Apple</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Orange</span> <span class="keyword">extends</span> <span class="title">TropicalFruit</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Banana</span> <span class="keyword">extends</span> <span class="title">TropicalFruit</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.拿集合<code>List</code>举例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;? extends TropicalFruit&gt; appleList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//报错，提示无法添加</span></span><br><span class="line">    appleList.add(<span class="keyword">new</span> Apple());</span><br><span class="line">    appleList.add(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.之前提到<code>&lt;? extends T&gt;</code>上界通配符规定的是最高到<code>T</code>类型，而我们这里<code>List&lt;? extends TropicalFruit&gt;</code>为什么不能够添加<code>Apple</code>呢？<code>null</code>是可以的，因为<code>null</code>表示任何类型。这里定义了一个装热带水果(TropicalFruit)的集合，按理说苹果(Apple)是可以放进去的，这是对于概念混淆可能会犯这样的错误。其实这里很好理解，首先编译器其实不聪明，<code>List&lt;? extends TropicalFruit&gt;</code>编译器理解的是，只要是热带水果本身或者其子类都是可以存放的，那么问题来了，假如是一个<code>List&lt;Apple&gt;</code>，此时我想放香蕉那显然是不行的。类型转化错误，但是编译器知道的是都是热带水果<code>TropicalFruit</code>，有可能是装苹果的袋子，也有可能是装香蕉的袋子，具体是不知道的，那么添加操作显然是不安全的。索性编译时期直接报错。</p>
+<h3 id="下界通配符-lt-super-T-gt"><a href="#下界通配符-lt-super-T-gt" class="headerlink" title="下界通配符&lt;? super T&gt;"></a>下界通配符&lt;? super T&gt;</h3><p>1.同样的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;? <span class="keyword">super</span> Apple&gt; appleList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    appleList.add(<span class="keyword">new</span> Apple());</span><br><span class="line">    appleList.add(<span class="keyword">new</span> RedApple());</span><br><span class="line">    appleList.add(<span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//报错，无法通过编译</span></span><br><span class="line">    appleList.add(<span class="keyword">new</span> TropicalFruit());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.还是一样的问题，既然规定存放的是<code>Apple</code>以及它的超类，那么<code>TropicalFruit</code>是符合要求的，为什么却无法添加？<br>3.类比上届通配符，<code>&lt;? super T&gt;</code>集合中保存的是<code>T</code>以及<code>T的父类</code>，编译器是不知道具体的类型的(有可能是直接父类，有可能是超类)，有可能是<code>List&lt;Apple&gt;</code>、<code>List&lt;Fruit&gt;</code>。例子中的代码</p>
+<blockquote>
+<p>List&lt;? super Apple&gt; 存放的是Apple，那么Apple，RedApple都是可以添加的</p>
+</blockquote>
+<p>这样可以添加的原因，想想多态的概念，向上转型是安全的操作，存放的Apple可以向上转型为<code>TropicalFruit、Fruit，Object</code>，如果存入<code>Fruit</code>显然涉及向下强制类型转化，可是编译器判断不了，因为可能是<code>List&lt;Apple&gt;</code>或者<code>List&lt;TropicalFruit&gt;</code>，也即下界其实定义最小能添加的元素类型<code>T或者T的子类</code>(向上转型属于安全操作)。</p>
+<h3 id="PECS原则"><a href="#PECS原则" class="headerlink" title="PECS原则"></a>PECS原则</h3><p>1.如果要从集合中读取类型T的数据，并且不能写入，可以使用 <code>? extends</code> 通配符；<code>(Producer Extends-&gt;PE)</code>。<br>2.如果要从集合中写入类型T的数据，并且不需要读取，可以使用 <code>? super</code> 通配符；<code>(Consumer Super-&gt;CS)</code>。<br>3.如果既要存又要取，那么就不要使用任何通配符。</p>
 
       
     </div>
@@ -486,10 +482,7 @@
         <div class="post-tags">
           
 
-            <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tags"></i> Hexo</a>
-          
-
-            <a href="/tags/blog/" rel="tag"><i class="fa fa-tags"></i> blog</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tags"></i> Java</a>
           
         </div>
       
@@ -502,8 +495,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/07/Git-开篇/" rel="next" title="Git常用命令整理">
-                <i class="fa fa-chevron-left"></i> Git常用命令整理
+              <a href="/2020/05/21/OkHttp-责任链模式/" rel="next" title="OkHttp-责任链模式">
+                <i class="fa fa-chevron-left"></i> OkHttp-责任链模式
               </a>
             
           </div>
@@ -511,10 +504,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/11/Hexo-three/" rel="prev" title="Hexo+GitHubPages绑定个人域名(三)">
-                Hexo+GitHubPages绑定个人域名(三) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -673,7 +662,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境配置"><span class="nav-number">2.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo安装"><span class="nav-number">3.</span> <span class="nav-text">Hexo安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建站"><span class="nav-number">4.</span> <span class="nav-text">建站</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#从泛型擦除说起"><span class="nav-number">1.</span> <span class="nav-text">从泛型擦除说起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上界通配符-lt-extends-T-gt"><span class="nav-number">2.</span> <span class="nav-text">上界通配符&lt;? extends T&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下界通配符-lt-super-T-gt"><span class="nav-number">3.</span> <span class="nav-text">下界通配符&lt;? super T&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PECS原则"><span class="nav-number">4.</span> <span class="nav-text">PECS原则</span></a></li></ol></div>
             
 
           </div>
