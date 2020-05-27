@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Sai">
 <meta property="og:description" content="从泛型擦除说起1.Java从1.5开始引入了泛型，泛型-也就是参数化类型。在Java容器类中大量的使用了泛型这种思想。泛型的利用好处很多：  减少了代码中大量的强制性类型转换，可读性更高通用性更强，类型更安全，提高性能等">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-25T09:36:01.242Z">
+<meta property="og:updated_time" content="2020-05-27T09:27:22.094Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java中泛型extends与super的区别">
 <meta name="twitter:description" content="从泛型擦除说起1.Java从1.5开始引入了泛型，泛型-也就是参数化类型。在Java容器类中大量的使用了泛型这种思想。泛型的利用好处很多：  减少了代码中大量的强制性类型转换，可读性更高通用性更强，类型更安全，提高性能等">
@@ -433,7 +433,8 @@
 <blockquote>
 <p>List&lt;? super Apple&gt; 存放的是Apple，那么Apple，RedApple都是可以添加的</p>
 </blockquote>
-<p>这样可以添加的原因，想想多态的概念，向上转型是安全的操作，存放的Apple可以向上转型为<code>TropicalFruit、Fruit，Object</code>，如果存入<code>Fruit</code>显然涉及向下强制类型转化，可是编译器判断不了，因为可能是<code>List&lt;Apple&gt;</code>或者<code>List&lt;TropicalFruit&gt;</code>，也即下界其实定义最小能添加的元素类型<code>T或者T的子类</code>(向上转型属于安全操作)。</p>
+<p>这样可以添加的原因，想想多态的概念，向上转型是安全的操作(子类的对象赋值给父类的引用)，存放的Apple可以向上转型为<code>TropicalFruit、Fruit，Object</code>，如果存入<code>Fruit</code>显然涉及向下强制类型转化，可是编译器判断不了，因为可能是<code>List&lt;Apple&gt;</code>或者<code>List&lt;TropicalFruit&gt;</code>，也即下界其实定义最小能添加的元素类型<code>T或者T的子类</code>(向上转型属于安全操作)。</p>
+<p>4.extends可用于的返回类型限定，不能用于参数类型限定。super可用于参数类型限定，不能用于返回类型限定。</p>
 <h3 id="PECS原则"><a href="#PECS原则" class="headerlink" title="PECS原则"></a>PECS原则</h3><p>1.如果要从集合中读取类型T的数据，并且不能写入，可以使用 <code>? extends</code> 通配符；<code>(Producer Extends-&gt;PE)</code>。<br>2.如果要从集合中写入类型T的数据，并且不需要读取，可以使用 <code>? super</code> 通配符；<code>(Consumer Super-&gt;CS)</code>。<br>3.如果既要存又要取，那么就不要使用任何通配符。</p>
 
       

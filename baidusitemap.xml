@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/26/Pass-by-value-or-Pass-by-reference/</loc>
-    <lastmod>2020-05-26T09:51:16.567Z</lastmod>
+    <loc>http://jiam.pro/2020/05/25/Java%E4%B8%AD%E6%B3%9B%E5%9E%8Bextends%E4%B8%8Esuper%E7%9A%84%E5%8C%BA%E5%88%AB/</loc>
+    <lastmod>2020-05-27T09:27:22.094Z</lastmod>
     <data>
         <display>
-        <title>Pass by value or Pass by reference?</title>
-        <pubTime>2020-05-26T07:18:32.000Z</pubTime>
+        <title>Java中泛型extends与super的区别</title>
+        <pubTime>2020-05-25T07:39:06.000Z</pubTime>
         
         <tag>Java</tag>
          
@@ -24,12 +24,12 @@
 
     
   <url>
-    <loc>http://jiam.pro/2020/05/25/Java%E4%B8%AD%E6%B3%9B%E5%9E%8Bextends%E4%B8%8Esuper%E7%9A%84%E5%8C%BA%E5%88%AB/</loc>
-    <lastmod>2020-05-25T09:36:01.242Z</lastmod>
+    <loc>http://jiam.pro/2020/05/26/Pass-by-value-or-Pass-by-reference/</loc>
+    <lastmod>2020-05-26T09:51:16.567Z</lastmod>
     <data>
         <display>
-        <title>Java中泛型extends与super的区别</title>
-        <pubTime>2020-05-25T07:39:06.000Z</pubTime>
+        <title>Pass by value or Pass by reference?</title>
+        <pubTime>2020-05-26T07:18:32.000Z</pubTime>
         
         <tag>Java</tag>
          
