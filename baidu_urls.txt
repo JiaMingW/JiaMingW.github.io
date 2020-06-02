@@ -1,1 +1,1 @@
-http://jiam.pro/2020/05/29/Java方法锁、对象锁、类锁的区别/
+http://jiam.pro/2020/05/29/Java中的线程池/
