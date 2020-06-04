@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Kotlin," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="Kotlin刚刚接触Kotlin，作为Android开发的官方语言，有必要花时间研究一波。。。">
-<meta name="keywords" content="Kotlin">
+<meta name="description" content="Java内存1.Java作为自动内存分配与回收的语言，了解内存分配的原理可以加深对JVM的理解，对于上层代码层面可以写出更健壮的代码。涉及到内存分配，必然要提及内存回收。程序的OOM显然是不合理的，理解清楚OOM的本质比解决OOM这个bug更重要。">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kotlin">
-<meta property="og:url" content="http://jiam.pro/2018/06/05/Kotlin/index.html">
+<meta property="og:title" content="Java虚拟机内存分配">
+<meta property="og:url" content="http://jiam.pro/2020/06/02/Java虚拟机内存分配/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="Kotlin刚刚接触Kotlin，作为Android开发的官方语言，有必要花时间研究一波。。。">
+<meta property="og:description" content="Java内存1.Java作为自动内存分配与回收的语言，了解内存分配的原理可以加深对JVM的理解，对于上层代码层面可以写出更健壮的代码。涉及到内存分配，必然要提及内存回收。程序的OOM显然是不合理的，理解清楚OOM的本质比解决OOM这个bug更重要。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-06T10:36:18.456Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/04/twqiKU.png">
+<meta property="og:updated_time" content="2020-06-04T06:51:40.797Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kotlin">
-<meta name="twitter:description" content="Kotlin刚刚接触Kotlin，作为Android开发的官方语言，有必要花时间研究一波。。。">
+<meta name="twitter:title" content="Java虚拟机内存分配">
+<meta name="twitter:description" content="Java内存1.Java作为自动内存分配与回收的语言，了解内存分配的原理可以加深对JVM的理解，对于上层代码层面可以写出更健壮的代码。涉及到内存分配，必然要提及内存回收。程序的OOM显然是不合理的，理解清楚OOM的本质比解决OOM这个bug更重要。">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/06/04/twqiKU.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://jiam.pro/2018/06/05/Kotlin/"/>
+  <link rel="canonical" href="http://jiam.pro/2020/06/02/Java虚拟机内存分配/"/>
 
 
 
 
 
-  <title>Kotlin | Sai</title>
+  <title>Java虚拟机内存分配 | Sai</title>
   
 
 
@@ -313,7 +315,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2018/06/05/Kotlin/">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/06/02/Java虚拟机内存分配/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JiaM">
@@ -330,7 +332,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kotlin</h1>
+          <h1 class="post-title" itemprop="name headline">Java虚拟机内存分配</h1>
         
 
         <div class="post-meta">
@@ -342,8 +344,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T13:35:02+08:00">
-                2018-06-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-02T15:21:37+08:00">
+                2020-06-02
               </time>
             
 
@@ -371,8 +373,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kotlin/" itemprop="url" rel="index">
-                    <span itemprop="name">Kotlin</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -389,8 +391,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/05/Kotlin/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/06/05/Kotlin/" itemprop="commentsCount"></span>
+                <a href="/2020/06/02/Java虚拟机内存分配/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/06/02/Java虚拟机内存分配/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -418,7 +420,25 @@
       
 
       
-        <h1 id="Kotlin"><a href="#Kotlin" class="headerlink" title="Kotlin"></a>Kotlin</h1><p>刚刚接触Kotlin，作为Android开发的官方语言，有必要花时间研究一波。。。</p>
+        <h3 id="Java内存"><a href="#Java内存" class="headerlink" title="Java内存"></a>Java内存</h3><p>1.<code>Java</code>作为自动内存分配与回收的语言，了解内存分配的原理可以加深对JVM的理解，对于上层代码层面可以写出更健壮的代码。涉及到内存分配，必然要提及内存回收。程序的OOM显然是不合理的，理解清楚OOM的本质比解决OOM这个<code>bug</code>更重要。<br><a id="more"></a></p>
+<p>2.<code>Java</code>内存分配，通常理解的是五大部分，但是需要明确的是，内存还是可以在细分的。作为不同的开发那主要的关注的点是不同的：<br><a href="https://imgchr.com/i/twqiKU" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/04/twqiKU.png" alt="twqiKU.png"></a></p>
+<h4 id="堆-Heap"><a href="#堆-Heap" class="headerlink" title="堆(Heap)"></a>堆(Heap)</h4><p>1.通常认为堆是线程共享的区域(严格意义上，HotSpot提供了TLAB一种优化策略，实际上它在内存的读取上是内存共享的，但是分配上确实独享的)。虚拟机启动时被创建，实例对象在堆上分配内存如：<code>new</code> <code>newarray</code>等，一般是动态创建出来的对象。创建出来的对象包含各自的成员变量，但是不包含成员方法，成员方法是同一个类对象共享的。堆还可以分为年轻代，年老代；年轻代还可以细分为一个<code>Eden</code>两个<code>Survivor</code>区，而这样区分的目的是为了更好的垃圾回收。</p>
+<h4 id="方法区-Method-Area"><a href="#方法区-Method-Area" class="headerlink" title="方法区(Method Area)"></a>方法区(Method Area)</h4><p>1.同样是线程共享区域，主要存储被加载过类的常量，静态变量等类的信息，按照分代的思想，方法区被视为<code>永久代</code>。</p>
+<h4 id="程序计数器-Program-Counter-Register"><a href="#程序计数器-Program-Counter-Register" class="headerlink" title="程序计数器(Program Counter Register)"></a>程序计数器(Program Counter Register)</h4><p>1.线程私有，一块较小的空间，当前线程字节码执行的指示器。字节码解释器通过对程序计数器的值来决定执行相应的代码逻辑，像分支，循环，异常处理等。</p>
+<h4 id="Java栈-Stack"><a href="#Java栈-Stack" class="headerlink" title="Java栈(Stack)"></a>Java栈(Stack)</h4><p>1.线程私有，生命周期与线程相同，当方法执行时会创建一个栈帧，存储局部的变量表、动态链接、方法出口等。方法的执行到完成的过程就是栈帧的出栈与入栈的过程。另外对于局部变量表存储了编译时期的基本数据类型(八种)和引用类型(reference)，但是并不是代表对象本身，只是一个指向对象的引用指针，或是指向一个代表对象的句柄或其他与此对象相关的位置。</p>
+<h4 id="本地方法栈-Native-Method-Stack"><a href="#本地方法栈-Native-Method-Stack" class="headerlink" title="本地方法栈(Native Method Stack)"></a>本地方法栈(Native Method Stack)</h4><p>1.本地方法栈使用的是<code>Native</code>方法服务，与<code>Java Stack</code>的作用类似。</p>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>1.作为方法区的一个部分，用于存放编译时期各种字面量与符号引用，是具有动态性的。</p>
+<h3 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h3><p>1.前面提到，Java程序动态的创建对象，而对象实例是被放在堆内存当中。堆内存在虚拟机启动时分配的内存大小的固定，如果无休止的创建对象不加以回收显然堆内存是不够用的也就是常见的OOM异常。Java作为动态管理内存的语言，垃圾收集也是JVM来完成的，那么虚拟机肯定是需要哪些对象是不会在被使用的了，对“死亡对象”进行回收。</p>
+<h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>1.概念很好理解，为对象添加引用计数器，每当对象被调用(引用)计数器自增。引用被释放则自减。按照这种逻辑，当一个对象的引用计数器为<code>0</code>时则认为对象没有被任务地方引用了，即可以被回收了。如果深入理解发现，这种情况下是处理不了循环引用的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReferenceCount</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Object reference = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReferenceCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ReferenceCount objectA = <span class="keyword">new</span> ReferenceCount();</span><br><span class="line">        ReferenceCount objectB = <span class="keyword">new</span> ReferenceCount();</span><br><span class="line"></span><br><span class="line">        objectA.reference = objectB;</span><br><span class="line">        objectB.reference = objectA;</span><br><span class="line"></span><br><span class="line">        objectA = <span class="keyword">null</span>;</span><br><span class="line">        objectB = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>1.Java通过可达性分析算法来判断对象是否存活，通过规定<code>GC Roots</code>作为起点，从起点开始向下搜索整个引用链，当某个对象到达<code>GC Roots</code>没有任何一条引用时，则认为此对象没有任何引用了。这样是能够解决上述的循环引用的问题。那什么样的对象可以作为<code>GC Roots</code>对象呢？主要有四种：</p>
+<blockquote>
+<p>栈帧中本地变量表中引用的对象<br>  方法区中静态属性引用的对象<br>  方法区中常量引用的对象<br>  JNI中引用的对象</p>
+</blockquote>
+<h4 id="几种引用"><a href="#几种引用" class="headerlink" title="几种引用"></a>几种引用</h4><p>1.即使采用可达性分析算法，判断对象是否存活还是不够智能。内存作为稀缺的资源，虽然某个对象的引用还在，可是这个对象可能都不会在被使用，那么当内存不足时应该被收集的。Java规定了四种常见的引用：强引用(Strong Reference)、软引用(Soft Reference)、弱引用(Weak Reference)、虚引用(Phantom Reference)。强引用很常见，创建的对象<code>ClassA a = new ClassA()</code>，这类引用则为强引用，虚拟机对强引用是不会回收的，即使抛出OOM异常。软引用，当内存充足的时候不会回收软引用的对象，而当内存不足的时会回收。弱引用则不管内存是否充足，在下一次垃圾回收时会被回收掉。虚引用，形同虚设，无论何时都会被回收，只是在被回收时会收到一个系统的通知，需要配合引用队列使用。</p>
+<h4 id="标记-清除"><a href="#标记-清除" class="headerlink" title="标记-清除"></a>标记-清除</h4><p>1.标记-清除算法分为两个阶段，标记阶段与清除阶段。标记出所有需要清理的对象，然后统一回收被标记的对象，无论标记还是清除都是比较耗时的效率低下。同时也带来另一个问题，内存不连续造成大量的内存碎片，由于堆内存的大小是虚拟机启动时固定的，假设此时需要一块较大的内存存放数组数据。显然存在申请不到这样一块较大内存的风险，那么又会触发垃圾收集。虽然如此，标记-清除还是指导了对回收算法改进的作用。</p>
+<h4 id="标记-整理"><a href="#标记-整理" class="headerlink" title="标记-整理"></a>标记-整理</h4><p>1.标记整理算法基于标记清除算法，都用到了标记阶段，只是对被标记的对象不在进行清除，而是将它们移动到一端。最后直接清除端边界以外的内存，这样解决了标记清除算法造成内存不连续的不足，但效率同样比较低下。</p>
+<h4 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h4><p>1.为了解决标记-清除的效率问题，实现的复制算法，主要思想将内存分为大小相等的两块，每次使用其中额一块内存，当这半块内存将用完时，将还存活的对象复制到另半块内存上。统一对死亡对象进行收集，效率提高，但是只用一半的内存发挥了最大作用。另一半只是相当于备份。由于堆内存的特性细分为年轻代、年老代。年轻代中的对象更新频繁，回收的也频繁，实际上推荐的复制算法并没有按照<code>1:1</code>来划分，而是按照<code>Eden:Survivor = 8:1</code>来分配的。另外由于<code>Survivor</code>是两块区域，每次使用<code>Eden</code>与其中一块<code>Survivor</code>区域，复制时将存活的对象拷贝到另一块<code>Survivor</code>上，最后收集<code>Eden与Survior</code>。</p>
+<h4 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h4><p>1.还是基于基本的算法，只是通过虚拟机各个区域不同的对象来采用不同的收集算法。对于堆中的<code>年轻代</code>使用<code>复制算法</code>，此区域垃圾回收频繁需要较高的效率支撑。而<code>年老代</code>对象存活时间久就适合<code>标记-整理</code>进行垃圾回收。</p>
 
       
     </div>
@@ -466,7 +486,7 @@
         <div class="post-tags">
           
 
-            <a href="/tags/Kotlin/" rel="tag"><i class="fa fa-tags"></i> Kotlin</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tags"></i> Java</a>
           
         </div>
       
@@ -479,8 +499,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/05/Java/" rel="next" title="Java">
-                <i class="fa fa-chevron-left"></i> Java
+              <a href="/2020/05/29/Java中的线程池/" rel="next" title="Java中的线程池">
+                <i class="fa fa-chevron-left"></i> Java中的线程池
               </a>
             
           </div>
@@ -488,10 +508,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/06/Android-开篇/" rel="prev" title="Android 开篇">
-                Android 开篇 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -650,7 +666,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kotlin"><span class="nav-number">1.</span> <span class="nav-text">Kotlin</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java内存"><span class="nav-number">1.</span> <span class="nav-text">Java内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#堆-Heap"><span class="nav-number">1.1.</span> <span class="nav-text">堆(Heap)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区-Method-Area"><span class="nav-number">1.2.</span> <span class="nav-text">方法区(Method Area)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器-Program-Counter-Register"><span class="nav-number">1.3.</span> <span class="nav-text">程序计数器(Program Counter Register)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java栈-Stack"><span class="nav-number">1.4.</span> <span class="nav-text">Java栈(Stack)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈-Native-Method-Stack"><span class="nav-number">1.5.</span> <span class="nav-text">本地方法栈(Native Method Stack)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.6.</span> <span class="nav-text">运行时常量池</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-number">2.</span> <span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数法"><span class="nav-number">2.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性分析算法"><span class="nav-number">2.2.</span> <span class="nav-text">可达性分析算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#几种引用"><span class="nav-number">2.3.</span> <span class="nav-text">几种引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记-清除"><span class="nav-number">2.4.</span> <span class="nav-text">标记-清除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记-整理"><span class="nav-number">2.5.</span> <span class="nav-text">标记-整理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制算法"><span class="nav-number">2.6.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分代收集算法"><span class="nav-number">2.7.</span> <span class="nav-text">分代收集算法</span></a></li></ol></li></ol></div>
             
 
           </div>
