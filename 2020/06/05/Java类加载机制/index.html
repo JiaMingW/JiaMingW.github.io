@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="测试一下分类Android">
+<meta name="description" content="Java类加载过程1.Java的类加载阶段通常认为主要包含五大阶段：加载阶段、链接阶段、初始化阶段、使用阶段、卸载阶段。其中链接阶段又可以细分为三大主要过程：验证、准备、解析。也即是：加载阶段、链接阶段(验证、准备、解析)、初始化阶段、使用阶段、卸载阶段。">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android">
-<meta property="og:url" content="http://jiam.pro/2018/06/05/Android/index.html">
+<meta property="og:title" content="Java类加载机制">
+<meta property="og:url" content="http://jiam.pro/2020/06/05/Java类加载机制/index.html">
 <meta property="og:site_name" content="Sai">
-<meta property="og:description" content="测试一下分类Android">
+<meta property="og:description" content="Java类加载过程1.Java的类加载阶段通常认为主要包含五大阶段：加载阶段、链接阶段、初始化阶段、使用阶段、卸载阶段。其中链接阶段又可以细分为三大主要过程：验证、准备、解析。也即是：加载阶段、链接阶段(验证、准备、解析)、初始化阶段、使用阶段、卸载阶段。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-06T08:21:16.435Z">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/08/tfeqpV.png">
+<meta property="og:updated_time" content="2020-06-08T09:45:36.482Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android">
-<meta name="twitter:description" content="测试一下分类Android">
+<meta name="twitter:title" content="Java类加载机制">
+<meta name="twitter:description" content="Java类加载过程1.Java的类加载阶段通常认为主要包含五大阶段：加载阶段、链接阶段、初始化阶段、使用阶段、卸载阶段。其中链接阶段又可以细分为三大主要过程：验证、准备、解析。也即是：加载阶段、链接阶段(验证、准备、解析)、初始化阶段、使用阶段、卸载阶段。">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/06/08/tfeqpV.png">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://jiam.pro/2018/06/05/Android/"/>
+  <link rel="canonical" href="http://jiam.pro/2020/06/05/Java类加载机制/"/>
 
 
 
 
 
-  <title>Android | Sai</title>
+  <title>Java类加载机制 | Sai</title>
   
 
 
@@ -312,7 +315,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2018/06/05/Android/">
+    <link itemprop="mainEntityOfPage" href="http://jiam.pro/2020/06/05/Java类加载机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JiaM">
@@ -329,7 +332,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android</h1>
+          <h1 class="post-title" itemprop="name headline">Java类加载机制</h1>
         
 
         <div class="post-meta">
@@ -341,8 +344,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T13:34:39+08:00">
-                2018-06-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-05T11:49:54+08:00">
+                2020-06-05
               </time>
             
 
@@ -370,8 +373,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -388,8 +391,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/05/Android/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/06/05/Android/" itemprop="commentsCount"></span>
+                <a href="/2020/06/05/Java类加载机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/06/05/Java类加载机制/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -417,8 +420,19 @@
       
 
       
-        <h6 id="测试一下分类"><a href="#测试一下分类" class="headerlink" title="测试一下分类"></a>测试一下分类</h6><p>Android</p>
-
+        <h3 id="Java类加载过程"><a href="#Java类加载过程" class="headerlink" title="Java类加载过程"></a>Java类加载过程</h3><p>1.Java的类加载阶段通常认为主要包含五大阶段：加载阶段、链接阶段、初始化阶段、使用阶段、卸载阶段。其中链接阶段又可以细分为三大主要过程：验证、准备、解析。也即是：加载阶段、链接阶段(验证、准备、解析)、初始化阶段、使用阶段、卸载阶段。<br><a id="more"></a><br><a href="https://imgchr.com/i/tfeqpV" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/08/tfeqpV.png" alt="tfeqpV.png"></a></p>
+<p>2.加载阶段：主要查找加载二进制的数据文件(.class文件)，一、通常是通过全限定名(包名+类名)来加载class文件，但是并没有限制二进制文件的涞源，如：动态代理生成的二进制字节流，ASM同样也可以生成class。二、通过网络获取(热部署)。三、同过压缩文件zip获取，像平时开发过程中的jar、war。四、从数据库中读取。</p>
+<p>3.链接阶段-验证：验证阶段主要包括一些基础信息的检验，如文件格式，像Java文件的魔术因子(0xCAFEBABE)。文件的版本号，因为存在兼容问题，高版本的JDK编译的class并不能被低版本的JDK所兼容的。文件的MD5指纹信息等等。元数据验证：主要目的啊是确保class字节流符合JVM的规范，如检查类是不是继承类final类(final类不可以被继承，同样final方法不可以被重写)，检查重写的方法是否符合规定(参数、方法名)；检查被加载的类是否存在父类，是否实现了接口，判断父类和接口的合法性。检查是否继承自抽象类，并实现所有的抽象方法等等。当然还包括了字节码验证，符号引用的验证。</p>
+<p>4.链接阶段-准备：验证阶段没有问题则会进入到准备阶段，注意此时一个类的静态变量会被分配内存(方法区)并且设置初始值，而这个初始值指的是如基本类型的默认值(int默认值为0等)，如果引用类型则为null。并不是我们在代码中显式的设置的值。静态的变量被分配到方法区区别于类的实例被分配到堆内存中。需要注意的是静态常量<code>final static</code>的值是确定的(不需要通过计算获得)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line">在准备阶段a的值并不是<span class="number">1</span>而是<span class="number">0</span>，常量b不需要通过计算来获得是确定的，所以b的值为<span class="number">2</span>.</span><br></pre></td></tr></table></figure></p>
+<p>5.链接阶段-解析：主要将类的符号引用转换为直接引用，包括类接口解析、字段解析、类方法解析、接口方法的解析。</p>
+<p>6.初始化阶段：为类的静态变量赋于正确的值，代码中显式设置的值。另外为了有更好的性能JVM的class初始化是一个懒加载机制，并不是一次性加载所有的类。按需加载，JVM规定了class的主动使用和被动使用。</p>
+<h4 id="类的主动使用"><a href="#类的主动使用" class="headerlink" title="类的主动使用"></a>类的主动使用</h4><p>1.使用关键字<code>new</code>创建类的实例触发类的初始化。但是区别于对于数组的初始化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Array</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Array[] array = <span class="keyword">new</span> Array[<span class="number">10</span>];</span><br><span class="line">    <span class="comment">//只不过开辟类一块连续的内存空间，但是并不会触发Array类的初始化操作</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.访问一个类的静态变量，包括读取更新等操作会触发类的初始化。同样的还有访问一个类的静态方法。特别注意的是，访问静态的常量(不需要通过计算获得的值)是不会触发初始化操作的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"will be initialized"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> RANDOM = <span class="keyword">new</span> Random().nextInt();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">     System.out.println(Test.a); step1</span><br><span class="line"><span class="comment">//        System.out.println(Test.RANDOM); step2</span></span><br><span class="line">&#125;</span><br><span class="line">step1打印的信息：</span><br><span class="line">&gt; Task :FinalTest.main()</span><br><span class="line"><span class="number">10</span></span><br><span class="line">可以发现当打印a的值时并没有触发Test类的初始化，因为a为静态的常量，在编译期就已经确定了值</span><br><span class="line"></span><br><span class="line">step2打印的信息：</span><br><span class="line">&gt; Task :FinalTest.main()</span><br><span class="line">will be initialized</span><br><span class="line"><span class="number">1458173345</span></span><br><span class="line">虽然RANDOM被<span class="keyword">final</span>修饰，但是RANDOM的值需要随机数计算来获得，而加载和链接阶段是无法对其计算的，因此触发初始化后才能获得值</span><br></pre></td></tr></table></figure></p>
+<p>3.对类进行反射操作。</p>
+<p>4.初始化子类会导致父类的初始化操作。</p>
+<p>5.设定为<code>main</code>方法的类会触发初始化。</p>
+<h4 id="类的被动使用"><a href="#类的被动使用" class="headerlink" title="类的被动使用"></a>类的被动使用</h4><p>1.除了JVM规定的这几种主动使用的情况，其余的情况则为被动使用。</p>
+<h3 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h3>
       
     </div>
     
@@ -462,6 +476,13 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tags"></i> Java</a>
+          
+        </div>
+      
 
       
       
@@ -471,8 +492,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/02/我的第一篇文章/" rel="next" title="我的第一篇文章">
-                <i class="fa fa-chevron-left"></i> 我的第一篇文章
+              <a href="/2020/06/04/ThreadLocal解析/" rel="next" title="ThreadLocal解析">
+                <i class="fa fa-chevron-left"></i> ThreadLocal解析
               </a>
             
           </div>
@@ -480,10 +501,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/05/Java/" rel="prev" title="Java">
-                Java <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -642,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#测试一下分类"><span class="nav-number">1.</span> <span class="nav-text">测试一下分类</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java类加载过程"><span class="nav-number">1.</span> <span class="nav-text">Java类加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的主动使用"><span class="nav-number">1.1.</span> <span class="nav-text">类的主动使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类的被动使用"><span class="nav-number">1.2.</span> <span class="nav-text">类的被动使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassLoader"><span class="nav-number">2.</span> <span class="nav-text">ClassLoader</span></a></li></ol></div>
             
 
           </div>
